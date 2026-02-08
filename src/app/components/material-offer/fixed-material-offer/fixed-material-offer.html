@@ -1,0 +1,43 @@
+<div class="border p-6 rounded border-gray-300 bg-white">
+  <h4 class="text-base font-bold underline mb-4">PREGLED PREDKALKULACIJE</h4>
+
+  <!-- Fixed position table -->
+  <p-table [value]="tableRows()" styleClass="p-datatable-sm p-datatable-gridlines">
+    <ng-template #header>
+      <tr>
+        <th class="w-14">Poz.</th>
+        <th>Naziv</th>
+        <th class="text-right w-28">Cena</th>
+        <th class="text-right w-24">Količina</th>
+        <th class="w-20">JM</th>
+        <th class="w-20">Grupa</th>
+        <th class="text-right w-32">Cena (€)</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-row>
+      @if (row.type === 'header') {
+      <tr>
+        <td colspan="7" class="font-bold bg-gray-100">{{ row.groupName }}:</td>
+      </tr>
+      } @else {
+      <tr>
+        <td>{{ row.position }}.</td>
+        <td>{{ row.name }}</td>
+        <td class="text-right">@if (row.price !== null) { {{ row.price | number : '1.2-2' }} }</td>
+        <td class="text-right">{{ row.quantity }}</td>
+        <td>{{ row.unit }}</td>
+        <td>{{ row.group }}</td>
+        <td class="text-right font-semibold">
+          @if (row.total !== null) { {{ row.total | number : '1.2-2' }} }
+        </td>
+      </tr>
+      }
+    </ng-template>
+    <ng-template #footer>
+      <tr>
+        <td colspan="6" class="text-right font-bold">UKUPNO:</td>
+        <td class="text-right font-bold">{{ total() | number : '1.2-2' }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

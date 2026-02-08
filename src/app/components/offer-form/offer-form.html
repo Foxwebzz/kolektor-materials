@@ -1,0 +1,91 @@
+<div class="flex justify-between mb-8 gap-8">
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-1">
+      <label for="offerCode" class="font-medium">Broj ponude:</label>
+      <p-inputgroup [style]="{ display: 'inline-flex', width: 'auto' }">
+        <p-inputgroup-addon class="border-0 bg-transparent pr-0"
+          >P{{ yearSuffix }}-</p-inputgroup-addon
+        >
+        <input
+          pInputText
+          id="offerCode"
+          [ngModel]="formData().offerCode"
+          (ngModelChange)="updateField('offerCode', $event)"
+          class="border-0 shadow-none px-1"
+          style="width: 10rem; flex: none"
+        />
+        <input
+          pInputText
+          [ngModel]="formData().offerSuffix"
+          (ngModelChange)="updateField('offerSuffix', $event)"
+          class="border-0 shadow-none px-0"
+          style="min-width: 3.5rem; flex: none"
+        />
+      </p-inputgroup>
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="customerName" class="font-medium">Kupac:</label>
+      <input
+        pInputText
+        id="customerName"
+        [ngModel]="formData().customerName"
+        (ngModelChange)="updateField('customerName', $event)"
+      />
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="transformerType" class="font-medium">Tip Transformatora:</label>
+      <input
+        pInputText
+        id="transformerType"
+        [ngModel]="formData().transformerType"
+        (ngModelChange)="updateField('transformerType', $event)"
+      />
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="salespersonName" class="font-medium">Komercijalista:</label>
+      <input
+        pInputText
+        id="salespersonName"
+        [ngModel]="formData().salespersonName"
+        (ngModelChange)="updateField('salespersonName', $event)"
+      />
+    </div>
+  </div>
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-1">
+      <label for="technicalCode" class="font-medium">Broj tehnike:</label>
+      <p-inputgroup
+        class="technical-code-input"
+        [style]="{ display: 'inline-flex', width: 'auto' }"
+      >
+        <p-inputgroup-addon class="border-0 bg-transparent pr-0"
+          >T{{ yearSuffix }}-</p-inputgroup-addon
+        >
+        <input
+          pInputText
+          id="technicalCode"
+          [ngModel]="formData().technicalCode"
+          (ngModelChange)="updateField('technicalCode', $event)"
+          class="border-0 shadow-none px-1"
+          style="width: 10rem; flex: none"
+        />
+        <input
+          pInputText
+          [ngModel]="formData().technicalSuffix"
+          (ngModelChange)="updateField('technicalSuffix', $event)"
+          class="border-0 shadow-none px-0"
+          style="min-width: 3.5rem; flex: none"
+        />
+      </p-inputgroup>
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="numberOfCommands" class="font-medium">Broj komada:</label>
+      <p-inputnumber
+        [ngModel]="formData().numberOfCommands"
+        (ngModelChange)="updateField('numberOfCommands', $event)"
+        inputId="numberOfCommands"
+        [min]="0"
+      ></p-inputnumber>
+    </div>
+  </div>
+</div>

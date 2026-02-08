@@ -1,0 +1,38 @@
+<div class="grid gap-4 sticky top-4">
+  @for (item of materials; track item) {
+  <div>
+    <p-button
+      [label]="item.title"
+      [icon]="expandedMaterial === item ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
+      iconPos="right"
+      severity="contrast"
+      fluid="true"
+      (onClick)="onMaterialClick(item)"
+    >
+    </p-button>
+
+    @if (expandedMaterial === item) {
+    <div @enterLeaveHeightAnimation class="mt-2 mb-2 grid gap-2">
+      @if (item.options.length > 5) {
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="searchTerm"
+        placeholder="Pretraži..."
+        class="w-full"
+      />
+      }
+      @for (option of getFilteredOptions(item.options); track option.name) {
+      <p-button
+        [label]="option.name"
+        severity="secondary"
+        fluid="true"
+        styleClass="text-left"
+        (onClick)="onOptionClick(item, option)"
+      ></p-button>
+      }
+    </div>
+    }
+  </div>
+  }
+</div>

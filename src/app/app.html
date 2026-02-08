@@ -1,0 +1,25 @@
+<div class="grid grid-cols-[300px_1fr] gap-6 m-6 min-h-[calc(100dvh-3rem)]">
+  <app-materials (optionSelected)="onOptionSelected($event)"></app-materials>
+  <div class="h-full">
+    <p-tabs value="0" class="h-full">
+      <p-tablist>
+        <p-tab value="0">Predkalkulacija</p-tab>
+        <p-tab value="1">Pregled predkalkulacije</p-tab>
+      </p-tablist>
+      <p-tabpanels style="padding: 1rem 0" class="h-full">
+        <p-tabpanel value="0">
+          <app-material-offer
+            [selectedOptions]="selectedOptions"
+            (quantityChanged)="onQuantityChanged($event)"
+            (priceChanged)="onPriceChanged($event)"
+            (optionRemoved)="onOptionRemoved($event)"
+            (materialsImported)="onMaterialsImported($event)"
+          ></app-material-offer>
+        </p-tabpanel>
+        <p-tabpanel value="1">
+          <app-fixed-material-offer [selectedOptions]="selectedOptions" [version]="optionsVersion"></app-fixed-material-offer>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+</div>
