@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -16,6 +16,7 @@ export { MATERIALS } from './data/materials.data';
   animations: [enterLeaveHeightAnimation],
 })
 export class MaterialsComponent {
+  selectedOptions = input<MaterialOption[]>([]);
   optionSelected = output<MaterialOption>();
   materials = MATERIALS;
   expandedMaterial: Material | null = null;
@@ -30,11 +31,15 @@ export class MaterialsComponent {
     this.optionSelected.emit({ ...option, title: material.title });
   }
 
+  getSelectedCount(material: Material): number {
+    return this.selectedOptions().filter((opt) => opt.title === material.title).length;
+  }
+
   getFilteredOptions(options: MaterialOption[]): MaterialOption[] {
     if (!this.searchTerm) {
       return options;
     }
     const term = this.searchTerm.toLowerCase();
-    return options.filter(option => option.name.toLowerCase().includes(term));
+    return options.filter((option) => option.name.toLowerCase().includes(term));
   }
 }

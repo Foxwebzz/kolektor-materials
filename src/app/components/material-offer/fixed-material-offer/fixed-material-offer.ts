@@ -23,12 +23,17 @@ export interface FixedTableRow {
 }
 
 export const FIXED_GROUPS: FixedGroupConfig[] = [
-  { name: 'Magnetno jezgro', titles: ['Magnetno Jezgro', 'Pritezne stranice'], startPos: 1, endPos: 2 },
+  {
+    name: 'Magnetno jezgro',
+    titles: ['Magnetno Jezgro', 'Pritezne stranice'],
+    startPos: 1,
+    endPos: 2,
+  },
   { name: 'Namotaji', titles: ['Namotaji'], startPos: 3, endPos: 7 },
   { name: 'Izolacija', titles: ['Izolacija'], startPos: 8, endPos: 12 },
   { name: 'Regulacija', titles: ['Regulacija'], startPos: 13, endPos: 14 },
   { name: 'Ulje', titles: ['Ulje'], startPos: 15, endPos: 15 },
-  { name: 'Kotel', titles: ['Trafo Sud'], startPos: 16, endPos: 18 },
+  { name: 'Trafo Sud', titles: ['Trafo Sud'], startPos: 16, endPos: 18 },
   { name: 'Hladjenje', titles: ['Hladjenje'], startPos: 19, endPos: 23 },
   { name: 'Izolatori', titles: ['Izolatori'], startPos: 24, endPos: 27 },
   { name: 'Oprema', titles: ['Oprema'], startPos: 28, endPos: 39 },
@@ -108,5 +113,4 @@ export class FixedMaterialOfferComponent {
     this.version();
     return this.selectedOptions().reduce((sum, opt) => sum + opt.price * opt.quantity, 0);
   });
-
 }

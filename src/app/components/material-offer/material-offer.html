@@ -16,19 +16,14 @@
     <app-offer-form [(formData)]="formData"></app-offer-form>
 
     @if (selectedOptions().length > 0) {
-    <div class="mb-10">
-      <h4 class="text-lg font-semibold mb-2">Pregled po grupama</h4>
-      <app-material-summary [selectedOptions]="selectedOptions()"></app-material-summary>
-    </div>
-
     <p-table [value]="sortedOptions()" styleClass="p-datatable-sm">
       <ng-template #header>
         <tr>
           <th class="w-12">Poz.</th>
           <th>Naziv</th>
           <th class="text-right">Cena (€)</th>
-          <th class="text-right">Količina</th>
-          <th>JM</th>
+          <th class="text-right">Kolicina</th>
+          <th style="min-width: 80px">JM</th>
           <th class="text-right">Ukupna cena (€)</th>
           <th class="w-12"></th>
         </tr>
@@ -36,12 +31,19 @@
       <ng-template #body let-option let-i="rowIndex">
         @if (option.isGroupStart) {
         <tr>
-          <td colspan="7" class="font-bold bg-gray-100">{{ option.title }}</td>
+          <td colspan="7" class="font-bold bg-gray-100">{{ option.displayTitle }}</td>
         </tr>
         }
         <tr>
           <td>{{ i + 1 }}.</td>
-          <td>{{ option.name }}</td>
+          <td>
+            <input
+              type="text"
+              [ngModel]="option.name"
+              (ngModelChange)="onNameChange(option.originalIndex, $event)"
+              class="w-full rounded border border-gray-300 px-2 py-1 outline-none focus:border-blue-500"
+            />
+          </td>
           <td class="text-right">
             <p-inputnumber
               [ngModel]="option.price"
@@ -66,7 +68,14 @@
               inputStyleClass="w-20 text-right"
             ></p-inputnumber>
           </td>
-          <td>{{ option.unit }}</td>
+          <td style="white-space: nowrap; overflow-wrap: normal">
+            <input
+              type="text"
+              [ngModel]="option.unit"
+              (ngModelChange)="onUnitChange(option.originalIndex, $event)"
+              class="w-20 rounded border border-gray-300 px-2 py-1 outline-none focus:border-blue-500"
+            />
+          </td>
           <td class="text-right font-semibold">
             {{ option.price * option.quantity | number:'1.2-2' }}
           </td>
@@ -84,14 +93,14 @@
       <ng-template #footer>
         <tr>
           <td colspan="5" class="text-right font-bold">UKUPNO:</td>
-          <td class="text-right font-bold">{{ total | number:'1.2-2' }}</td>
+          <td class="text-right font-bold">{{ total | number:'1.2-2' }} €</td>
           <td></td>
         </tr>
         <tr>
           <td colspan="5" class="text-right font-bold">
             Energetski dodatak ({{ energyPercent }}%):
           </td>
-          <td class="text-right font-bold">{{ total * energyPercent / 100 | number:'1.2-2' }}</td>
+          <td class="text-right font-bold">{{ total * energyPercent / 100 | number:'1.2-2' }} €</td>
           <td></td>
         </tr>
         <tr>
@@ -108,7 +117,7 @@
             ></p-inputnumber>
             energetski dodatak:
           </td>
-          <td class="text-right font-bold">{{ totalWithEnergy | number:'1.2-2' }}</td>
+          <td class="text-right font-bold">{{ totalWithEnergy | number:'1.2-2' }} €</td>
           <td></td>
         </tr>
         <tr>

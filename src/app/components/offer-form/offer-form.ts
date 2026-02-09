@@ -11,6 +11,7 @@ export interface OfferFormData {
   customerName: string;
   transformerType: string;
   salespersonName: string;
+  country: string;
   technicalCode: string;
   technicalSuffix: string;
   numberOfCommands: number | null;
@@ -28,6 +29,7 @@ export class OfferFormComponent {
     customerName: '',
     transformerType: '',
     salespersonName: '',
+    country: '',
     technicalCode: '',
     technicalSuffix: '.0',
     numberOfCommands: null,

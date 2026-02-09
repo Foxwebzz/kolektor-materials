@@ -10,9 +10,9 @@ import autoTable from 'jspdf-autotable';
 import * as pdfjsLib from 'pdfjs-dist';
 import { MaterialOption, MATERIALS } from '../materials/materials';
 import { OfferFormComponent, OfferFormData } from '../offer-form/offer-form';
-import { MaterialSummaryComponent } from '../offer-form/material-summary/material-summary';
 import { FIXED_GROUPS } from './fixed-material-offer/fixed-material-offer';
 import { extractPdfField, GROUP_PATTERN } from '../../utils/regex-patterns';
+import { registerFonts } from '../../utils/pdf-fonts';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
@@ -27,13 +27,14 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
     DatePickerModule,
     ButtonModule,
     OfferFormComponent,
-    MaterialSummaryComponent,
   ],
 })
 export class MaterialOfferComponent {
   selectedOptions = input<MaterialOption[]>([]);
   quantityChanged = output<{ index: number; quantity: number }>();
   priceChanged = output<{ index: number; price: number }>();
+  nameChanged = output<{ index: number; name: string }>();
+  unitChanged = output<{ index: number; unit: string }>();
   optionRemoved = output<number>();
   materialsImported = output<MaterialOption[]>();
 
@@ -48,6 +49,7 @@ export class MaterialOfferComponent {
     customerName: '',
     transformerType: '',
     salespersonName: '',
+    country: '',
     technicalCode: '',
     technicalSuffix: '.0',
     numberOfCommands: null,
@@ -55,20 +57,28 @@ export class MaterialOfferComponent {
 
   private readonly titleOrder = MATERIALS.map((m) => m.title);
 
+  private readonly displayTitleMap: Record<string, string> = {
+    'Pritezne stranice': 'Magnetno Jezgro',
+  };
+
+  private getDisplayTitle(title: string): string {
+    return this.displayTitleMap[title] ?? title;
+  }
+
   sortedOptions = computed(() => {
     const sorted = this.selectedOptions()
-      .map((opt, index) => ({ ...opt, originalIndex: index, isGroupStart: false }))
+      .map((opt, index) => Object.assign(opt, { originalIndex: index, isGroupStart: false, displayTitle: this.getDisplayTitle(opt.title ?? '') }))
       .sort((a, b) => {
         const aIdx = this.titleOrder.indexOf(a.title ?? '');
         const bIdx = this.titleOrder.indexOf(b.title ?? '');
         return (aIdx === -1 ? 999 : aIdx) - (bIdx === -1 ? 999 : bIdx);
       });
 
-    let lastTitle = '';
+    let lastDisplayTitle = '';
     for (const opt of sorted) {
-      if (opt.title && opt.title !== lastTitle) {
+      if (opt.displayTitle && opt.displayTitle !== lastDisplayTitle) {
         opt.isGroupStart = true;
-        lastTitle = opt.title;
+        lastDisplayTitle = opt.displayTitle;
       }
     }
 
@@ -95,6 +105,14 @@ export class MaterialOfferComponent {
     this.priceChanged.emit({ index, price });
   }
 
+  onNameChange(index: number, name: string) {
+    this.nameChanged.emit({ index, name });
+  }
+
+  onUnitChange(index: number, unit: string) {
+    this.unitChanged.emit({ index, unit });
+  }
+
   onRemove(index: number) {
     this.optionRemoved.emit(index);
   }
@@ -109,6 +127,7 @@ export class MaterialOfferComponent {
 
   async saveToPdf() {
     const doc = new jsPDF();
+    await registerFonts(doc);
 
     // Add logo image
     const logoImg = await this.loadImage('assets/kolektor.png');
@@ -137,9 +156,10 @@ export class MaterialOfferComponent {
     doc.text(`Kupac: ${this.formData.customerName}`, 14, yPos);
     doc.text(`Broj komada: ${this.formData.numberOfCommands ?? ''}`, 110, yPos);
     yPos += 7;
-    doc.text(`Tip Transformatora: ${this.formData.transformerType}`, 14, yPos);
+    doc.text(`Tip: ${this.formData.transformerType}`, 14, yPos);
+    doc.text(`Komercijalista: ${this.formData.salespersonName}`, 110, yPos);
     yPos += 7;
-    doc.text(`Komercijalista: ${this.formData.salespersonName}`, 14, yPos);
+    doc.text(`Zemlja: ${this.formData.country}`, 14, yPos);
 
     // Material summary table
     const groupSummaryData = this.getGroupSummaryData();
@@ -157,7 +177,7 @@ export class MaterialOfferComponent {
         this.formatNumber(g.total),
         `${g.percentage.toFixed(2)} %`,
       ]),
-      styles: { font: 'helvetica', fontSize: 10 },
+      styles: { font: 'Roboto', fontSize: 10 },
       headStyles: { fillColor: [66, 66, 66] },
       columnStyles: {
         1: { halign: 'right' },
@@ -208,7 +228,7 @@ export class MaterialOfferComponent {
       ],
       body: tableBody,
       showFoot: false,
-      styles: { font: 'helvetica', fontSize: 10 },
+      styles: { font: 'Roboto', fontSize: 10 },
       alternateRowStyles: { fillColor: [255, 255, 255] },
       headStyles: { fillColor: [66, 66, 66] },
       columnStyles: {
@@ -229,14 +249,14 @@ export class MaterialOfferComponent {
     let footY = finalY + 8;
 
     doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
+    doc.setFont('Roboto', 'bold');
 
     doc.text('UKUPNO:', marginLeft, footY);
-    doc.text(this.formatNumber(this.total), valueX, footY, { align: 'right' });
+    doc.text(`${this.formatNumber(this.total)} €`, valueX, footY, { align: 'right' });
 
     footY += 7;
     doc.text(`Ukupna cena + ${this.energyPercent}% energetski dodatak:`, marginLeft, footY);
-    doc.text(this.formatNumber(this.totalWithEnergy), valueX, footY, { align: 'right' });
+    doc.text(`${this.formatNumber(this.totalWithEnergy)} €`, valueX, footY, { align: 'right' });
 
     if (this.transformerMass) {
       footY += 7;
@@ -305,7 +325,7 @@ export class MaterialOfferComponent {
           'Poz.',
           'Naziv',
           { content: 'Cena (€)', styles: { halign: 'right' } },
-          { content: 'Količina', styles: { halign: 'right' } },
+          { content: 'Kolicina', styles: { halign: 'right' } },
           'JM',
           'Grupa',
           { content: 'Cena (€)', styles: { halign: 'right' } },
@@ -313,7 +333,7 @@ export class MaterialOfferComponent {
       ],
       body: fixedBody,
       showFoot: false,
-      styles: { font: 'helvetica', fontSize: 10 },
+      styles: { font: 'Roboto', fontSize: 10 },
       alternateRowStyles: { fillColor: [255, 255, 255] },
       headStyles: { fillColor: [66, 66, 66] },
       columnStyles: {
@@ -330,9 +350,9 @@ export class MaterialOfferComponent {
     const fixedFinalY = (doc as any).lastAutoTable.finalY;
     let fixedFootY = fixedFinalY + 8;
     doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
+    doc.setFont('Roboto', 'bold');
     doc.text('UKUPNO:', marginLeft, fixedFootY);
-    doc.text(this.formatNumber(this.total), valueX, fixedFootY, { align: 'right' });
+    doc.text(`${this.formatNumber(this.total)} €`, valueX, fixedFootY, { align: 'right' });
 
     const brojPonude = `P${this.yearSuffix}-${this.formData.offerCode}${this.formData.offerSuffix}`;
     const brojTehnike = `T${this.yearSuffix}-${this.formData.technicalCode}${this.formData.technicalSuffix}`;
@@ -431,13 +451,14 @@ export class MaterialOfferComponent {
     const technicalCode = techMatch?.[1] ?? '';
     const technicalSuffix = techMatch?.[2] ?? '.0';
 
-    const customerName = extractPdfField(text, 'Kupac', ['Broj komada:', 'Tip Transformatora:']);
+    const customerName = extractPdfField(text, 'Kupac', ['Broj komada:', 'Tip:']);
 
     const komadaMatch = text.match(/Broj komada:\s*(\d+)/);
     const numberOfCommands = komadaMatch ? parseInt(komadaMatch[1]) : null;
 
-    const transformerType = extractPdfField(text, 'Tip Transformatora', ['Komercijalista:']);
-    const salespersonName = extractPdfField(text, 'Komercijalista', ['Grupa', 'Poz.']);
+    const transformerType = extractPdfField(text, 'Tip', ['Komercijalista:', 'Zemlja:']);
+    const salespersonName = extractPdfField(text, 'Komercijalista', ['Zemlja:', 'Grupa', 'Poz.']);
+    const country = extractPdfField(text, 'Zemlja', ['Grupa', 'Poz.']);
 
     this.formData = {
       offerCode,
@@ -448,6 +469,7 @@ export class MaterialOfferComponent {
       numberOfCommands,
       transformerType,
       salespersonName,
+      country,
     };
 
     const energyMatch = text.match(/Ukupna cena \+\s*([\d.,]+)%\s*energetski dodatak/);

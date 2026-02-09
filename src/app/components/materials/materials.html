@@ -2,13 +2,18 @@
   @for (item of materials; track item) {
   <div>
     <p-button
-      [label]="item.title"
-      [icon]="expandedMaterial === item ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
-      iconPos="right"
       severity="contrast"
       fluid="true"
+      styleClass="!justify-between"
       (onClick)="onMaterialClick(item)"
     >
+      <span>{{ item.title }}</span>
+      <span class="flex items-center gap-2">
+        @if (getSelectedCount(item) > 0) {
+          <span class="rounded-full bg-white/20 px-2 py-0.5 text-xs">{{ getSelectedCount(item) }}</span>
+        }
+        <i [class]="expandedMaterial === item ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></i>
+      </span>
     </p-button>
 
     @if (expandedMaterial === item) {
@@ -21,8 +26,7 @@
         placeholder="Pretraži..."
         class="w-full"
       />
-      }
-      @for (option of getFilteredOptions(item.options); track option.name) {
+      } @for (option of getFilteredOptions(item.options); track option.name) {
       <p-button
         [label]="option.name"
         severity="secondary"
