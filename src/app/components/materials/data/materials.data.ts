@@ -17,12 +17,12 @@ export const MATERIALS: Material[] = [
   {
     title: 'Pritezne stranice',
     options: [
-      { name: 'Pritezne stranice 1', price: 5000, quantity: 1, unit: 'komplet', group: 'Fei' },
-      { name: 'Pritezne stranice 2', price: 6000, quantity: 1, unit: 'komplet', group: 'Fei' },
-      { name: 'Pritezne stranice 4', price: 7000, quantity: 1, unit: 'komplet', group: 'Fei' },
-      { name: 'Pritezne stranice 5', price: 8000, quantity: 1, unit: 'komplet', group: 'Fei' },
-      { name: 'Pritezne stranice 6', price: 9000, quantity: 1, unit: 'komplet', group: 'Fei' },
-      { name: 'Pritezne stranice 7', price: 10000, quantity: 1, unit: 'komplet', group: 'Fei' },
+      { name: 'Pritezne stranice 1', price: 5000, quantity: 1, unit: 'set', group: 'Fei' },
+      { name: 'Pritezne stranice 2', price: 6000, quantity: 1, unit: 'set', group: 'Fei' },
+      { name: 'Pritezne stranice 4', price: 7000, quantity: 1, unit: 'set', group: 'Fei' },
+      { name: 'Pritezne stranice 5', price: 8000, quantity: 1, unit: 'set', group: 'Fei' },
+      { name: 'Pritezne stranice 6', price: 9000, quantity: 1, unit: 'set', group: 'Fei' },
+      { name: 'Pritezne stranice 7', price: 10000, quantity: 1, unit: 'set', group: 'Fei' },
     ],
   },
   {
