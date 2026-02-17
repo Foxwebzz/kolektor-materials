@@ -1,0 +1,40 @@
+<div class="grid grid-cols-[300px_1fr] gap-6 m-6 min-h-[calc(100dvh-3rem)]">
+  <app-materials [selectedOptions]="selectedOptions" (optionSelected)="onOptionSelected($event)"></app-materials>
+  <div class="h-full">
+    <p-tabs value="0" class="h-full">
+      <p-tablist>
+        <p-tab value="0">Predkalkulacija</p-tab>
+        <p-tab value="1">Pregled predkalkulacije</p-tab>
+        <p-tab value="2">Pregled po grupama</p-tab>
+      </p-tablist>
+      <p-tabpanels style="padding: 1rem 0" class="h-full">
+        <p-tabpanel value="0">
+          <app-material-offer
+            [selectedOptions]="selectedOptions"
+            (quantityChanged)="onQuantityChanged($event)"
+            (priceChanged)="onPriceChanged($event)"
+            (nameChanged)="onNameChanged($event)"
+            (unitChanged)="onUnitChanged($event)"
+            (optionRemoved)="onOptionRemoved($event)"
+            (materialsImported)="onMaterialsImported($event)"
+          ></app-material-offer>
+        </p-tabpanel>
+        <p-tabpanel value="1">
+          <app-fixed-material-offer
+            [selectedOptions]="selectedOptions"
+            [version]="optionsVersion"
+            [energyPercent]="materialOffer?.energyPercent ?? 5"
+            [transformerMass]="materialOffer?.transformerMass ?? 0"
+            [totalWithEnergy]="materialOffer?.totalWithEnergy ?? 0"
+          ></app-fixed-material-offer>
+        </p-tabpanel>
+        <p-tabpanel value="2">
+          <div class="border p-6 rounded border-gray-300 bg-white">
+            <h4 class="text-lg font-semibold mb-4">Pregled po grupama</h4>
+            <app-material-summary [selectedOptions]="selectedOptions"></app-material-summary>
+          </div>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+</div>

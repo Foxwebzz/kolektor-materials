@@ -1,0 +1,33 @@
+<div
+  class="relative flex items-center justify-center h-dvh bg-cover bg-center bg-no-repeat"
+  style="background-image: url('assets/kolektor-bg.jpg')"
+>
+  <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+  <div class="relative bg-white p-8 rounded-lg shadow-2xl w-[360px]">
+    <div class="flex justify-center mb-6">
+      <img src="assets/kolektor.png" alt="Kolektor" class="h-12" />
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <div class="flex flex-col gap-2 mb-4">
+        <label for="username" class="font-medium">Korisnik</label>
+        <input pInputText id="username" formControlName="username" placeholder="Korisnik" />
+      </div>
+      <div class="flex flex-col gap-2 mb-6">
+        <label for="password" class="font-medium">Lozinka</label>
+        <p-password
+          id="password"
+          formControlName="password"
+          placeholder="Lozinka"
+          [feedback]="false"
+          [toggleMask]="true"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+        />
+      </div>
+      @if (errorMessage) {
+      <div class="text-red-600 text-sm mb-4">{{ errorMessage }}</div>
+      }
+      <p-button type="submit" label="Prijavi se" class="w-full" styleClass="w-full" />
+    </form>
+  </div>
+</div>
