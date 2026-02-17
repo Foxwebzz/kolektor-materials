@@ -57,9 +57,7 @@ export class MaterialOfferComponent {
 
   private readonly titleOrder = MATERIALS.map((m) => m.title);
 
-  private readonly displayTitleMap: Record<string, string> = {
-    'Pritezne stranice': 'Magnetno Jezgro',
-  };
+  private readonly displayTitleMap: Record<string, string> = {};
 
   private getDisplayTitle(title: string): string {
     return this.displayTitleMap[title] ?? title;
@@ -67,7 +65,13 @@ export class MaterialOfferComponent {
 
   sortedOptions = computed(() => {
     const sorted = this.selectedOptions()
-      .map((opt, index) => Object.assign(opt, { originalIndex: index, isGroupStart: false, displayTitle: this.getDisplayTitle(opt.title ?? '') }))
+      .map((opt, index) =>
+        Object.assign(opt, {
+          originalIndex: index,
+          isGroupStart: false,
+          displayTitle: this.getDisplayTitle(opt.title ?? ''),
+        })
+      )
       .sort((a, b) => {
         const aIdx = this.titleOrder.indexOf(a.title ?? '');
         const bIdx = this.titleOrder.indexOf(b.title ?? '');
@@ -139,25 +143,24 @@ export class MaterialOfferComponent {
     doc.text('PREDKALKULACIJA', 14, 30);
 
     doc.setFontSize(10);
-    doc.text(`Datum: ${this.formatDate(this.date)}`, 150, 20);
+    doc.text(`Datum: ${this.formatDate(this.date)}`, 135, 20);
+
+    const brojPonude = this.formData.offerCode
+      ? `P${this.yearSuffix}-${this.formData.offerCode}${this.formData.offerSuffix}`
+      : '';
+    const brojTehnike = this.formData.technicalCode
+      ? `T${this.yearSuffix}-${this.formData.technicalCode}${this.formData.technicalSuffix}`
+      : '';
 
     let yPos = 45;
-    doc.text(
-      `Broj ponude: P${this.yearSuffix}-${this.formData.offerCode}${this.formData.offerSuffix}`,
-      14,
-      yPos
-    );
-    doc.text(
-      `Broj tehnike: T${this.yearSuffix}-${this.formData.technicalCode}${this.formData.technicalSuffix}`,
-      110,
-      yPos
-    );
+    doc.text(`Broj ponude: ${brojPonude}`, 14, yPos);
+    doc.text(`Broj tehnike: ${brojTehnike}`, 135, yPos);
     yPos += 7;
     doc.text(`Kupac: ${this.formData.customerName}`, 14, yPos);
-    doc.text(`Broj komada: ${this.formData.numberOfCommands ?? ''}`, 110, yPos);
+    doc.text(`Broj komada: ${this.formData.numberOfCommands ?? ''}`, 135, yPos);
     yPos += 7;
     doc.text(`Tip: ${this.formData.transformerType}`, 14, yPos);
-    doc.text(`Komercijalista: ${this.formData.salespersonName}`, 110, yPos);
+    doc.text(`Komercijalista: ${this.formData.salespersonName}`, 135, yPos);
     yPos += 7;
     doc.text(`Zemlja: ${this.formData.country}`, 14, yPos);
 
@@ -255,13 +258,22 @@ export class MaterialOfferComponent {
     doc.text(`${this.formatNumber(this.total)} €`, valueX, footY, { align: 'right' });
 
     footY += 7;
+    doc.text(`Energetski dodatak (${this.energyPercent}%):`, marginLeft, footY);
+    doc.text(`${this.formatNumber((this.total * this.energyPercent) / 100)} €`, valueX, footY, {
+      align: 'right',
+    });
+
+    footY += 7;
     doc.text(`Ukupna cena + ${this.energyPercent}% energetski dodatak:`, marginLeft, footY);
     doc.text(`${this.formatNumber(this.totalWithEnergy)} €`, valueX, footY, { align: 'right' });
 
     if (this.transformerMass) {
+      footY += 4;
+      doc.setDrawColor(150, 150, 150);
+      doc.line(marginLeft, footY, valueX, footY);
       footY += 7;
       doc.text(
-        `Masa Transformatora: ${this.formatNumber(this.transformerMass)} kg`,
+        `Masa Transformatora: ${Math.round(this.transformerMass!)} kg`,
         marginLeft,
         footY
       );
@@ -354,13 +366,50 @@ export class MaterialOfferComponent {
     doc.text('UKUPNO:', marginLeft, fixedFootY);
     doc.text(`${this.formatNumber(this.total)} €`, valueX, fixedFootY, { align: 'right' });
 
-    const brojPonude = `P${this.yearSuffix}-${this.formData.offerCode}${this.formData.offerSuffix}`;
-    const brojTehnike = `T${this.yearSuffix}-${this.formData.technicalCode}${this.formData.technicalSuffix}`;
-    doc.save(`KALKP_${brojPonude}_${brojTehnike}.pdf`);
+    fixedFootY += 7;
+    doc.text(`Energetski dodatak (${this.energyPercent}%):`, marginLeft, fixedFootY);
+    doc.text(
+      `${this.formatNumber((this.total * this.energyPercent) / 100)} €`,
+      valueX,
+      fixedFootY,
+      { align: 'right' }
+    );
+
+    fixedFootY += 7;
+    doc.text(`Ukupna cena + ${this.energyPercent}% energetski dodatak:`, marginLeft, fixedFootY);
+    doc.text(`${this.formatNumber(this.totalWithEnergy)} €`, valueX, fixedFootY, {
+      align: 'right',
+    });
+
+    if (this.transformerMass) {
+      fixedFootY += 4;
+      doc.setDrawColor(150, 150, 150);
+      doc.line(marginLeft, fixedFootY, valueX, fixedFootY);
+      fixedFootY += 7;
+      doc.text(
+        `Masa Transformatora: ${Math.round(this.transformerMass!)} kg`,
+        marginLeft,
+        fixedFootY
+      );
+      doc.text(
+        `${this.formatNumber(this.totalWithEnergy / this.transformerMass)} €/kg`,
+        valueX,
+        fixedFootY,
+        { align: 'right' }
+      );
+    }
+
+    const savePonude = this.formData.offerCode
+      ? `P${this.yearSuffix}-${this.formData.offerCode}${this.formData.offerSuffix}`
+      : 'P';
+    const saveTehnike = this.formData.technicalCode
+      ? `T${this.yearSuffix}-${this.formData.technicalCode}${this.formData.technicalSuffix}`
+      : 'T';
+    doc.save(`KALKP_${savePonude}_${saveTehnike}.pdf`);
   }
 
   private formatNumber(value: number): string {
-    return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return value.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   private getGroupSummaryData(): {
@@ -371,11 +420,11 @@ export class MaterialOfferComponent {
   }[] {
     const groupConfig = [
       { code: 'Cu', name: 'Bakar (Cu)' },
-      { code: 'Fe', name: 'Magnetna plocevina (Fe)' },
+      { code: 'Fe', name: 'Magnetno jezgro (Fe)' },
       { code: 'Fei', name: 'Celik (Fei)' },
       { code: 'Pap', name: 'Papir (Pap)' },
       { code: 'Oil', name: 'Ulje (Oil)' },
-      { code: 'h', name: 'Rad (Delo)' },
+      { code: 'h', name: 'Rad (h)' },
       { code: 'n', name: 'Drugi materijali (n)' },
     ];
 
@@ -507,17 +556,17 @@ export class MaterialOfferComponent {
       .replace(/UKUPNO:?\s*[\d,.]+/gi, ' ');
 
     // Try new format first (with Grupa column at the end)
-    // Row format: "1 MaterialName 7.00 12.800 kg 89,600.00 Fe"
+    // Row format: "1 MaterialName 7,00 12.800 kg 89.600,00 Fe" (de-DE format)
     const newFormatRegex = new RegExp(
-      `(\\d+)\\s+(.+?)\\s+([\\d,]+\\.\\d{2})\\s+([\\d.,]+)\\s+(\\S+)\\s+([\\d,]+\\.\\d{2})\\s+(${GROUP_PATTERN})(?=\\s|$)`,
+      `(\\d+)\\s+(.+?)\\s+([\\d.]+,\\d{2})\\s+([\\d.,]+)\\s+(\\S+)\\s+([\\d.]+,\\d{2})\\s+(${GROUP_PATTERN})(?=\\s|$)`,
       'g'
     );
 
     let match;
     while ((match = newFormatRegex.exec(tableText)) !== null) {
       const name = match[2].trim();
-      const price = parseFloat(match[3].replace(/,/g, ''));
-      const quantity = parseFloat(match[4].replace(/[.,]/g, ''));
+      const price = parseFloat(match[3].replace(/\./g, '').replace(',', '.'));
+      const quantity = parseFloat(match[4].replace(/\./g, '').replace(',', '.'));
       const unit = match[5];
       const group = match[7];
 
@@ -529,14 +578,14 @@ export class MaterialOfferComponent {
 
     if (materials.length > 0) return materials;
 
-    // Fallback: legacy format without Grupa column (handles dot/comma-formatted quantities)
-    // Row format: "1 MaterialName 7.00 12,800 kg 89600.00"
-    const legacyRegex = /(\d+)\s+(.+?)\s+([\d,]+\.\d{2})\s+([\d.,]+)\s+(\S+)\s+([\d,]+\.\d{2})/g;
+    // Fallback: legacy format without Grupa column
+    // Row format: "1 MaterialName 7,00 12.800 kg 89.600,00" (de-DE format)
+    const legacyRegex = /(\d+)\s+(.+?)\s+([\d.]+,\d{2})\s+([\d.,]+)\s+(\S+)\s+([\d.]+,\d{2})/g;
 
     while ((match = legacyRegex.exec(tableText)) !== null) {
       const name = match[2].trim();
-      const price = parseFloat(match[3].replace(/,/g, ''));
-      const quantity = parseFloat(match[4].replace(/[.,]/g, ''));
+      const price = parseFloat(match[3].replace(/\./g, '').replace(',', '.'));
+      const quantity = parseFloat(match[4].replace(/\./g, '').replace(',', '.'));
       const unit = match[5];
 
       if (name && !isNaN(price) && !isNaN(quantity)) {

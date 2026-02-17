@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
 import { MaterialsComponent, MaterialOption } from './components/materials/materials';
@@ -12,6 +12,7 @@ import { MaterialSummaryComponent } from './components/offer-form/material-summa
   imports: [ButtonModule, TabsModule, MaterialsComponent, MaterialOfferComponent, FixedMaterialOfferComponent, MaterialSummaryComponent],
 })
 export class AppComponent {
+  @ViewChild(MaterialOfferComponent) materialOffer!: MaterialOfferComponent;
   selectedOptions: MaterialOption[] = [];
   optionsVersion = 0;
 

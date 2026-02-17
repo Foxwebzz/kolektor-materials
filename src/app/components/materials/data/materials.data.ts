@@ -12,11 +12,6 @@ export const MATERIALS: Material[] = [
       { name: 'Magnetni lim MOH', price: 5, quantity: 1, unit: 'kg', group: 'Fe' },
       { name: 'Magnetni lim 105H', price: 6, quantity: 1, unit: 'kg', group: 'Fe' },
       { name: 'Magnetni lim M4', price: 6, quantity: 1, unit: 'kg', group: 'Fe' },
-    ],
-  },
-  {
-    title: 'Pritezne stranice',
-    options: [
       { name: 'Pritezne stranice 1', price: 5000, quantity: 1, unit: 'set', group: 'Fei' },
       { name: 'Pritezne stranice 2', price: 6000, quantity: 1, unit: 'set', group: 'Fei' },
       { name: 'Pritezne stranice 4', price: 7000, quantity: 1, unit: 'set', group: 'Fei' },

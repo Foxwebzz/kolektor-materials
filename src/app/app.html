@@ -20,7 +20,13 @@
           ></app-material-offer>
         </p-tabpanel>
         <p-tabpanel value="1">
-          <app-fixed-material-offer [selectedOptions]="selectedOptions" [version]="optionsVersion"></app-fixed-material-offer>
+          <app-fixed-material-offer
+            [selectedOptions]="selectedOptions"
+            [version]="optionsVersion"
+            [energyPercent]="materialOffer?.energyPercent ?? 5"
+            [transformerMass]="materialOffer?.transformerMass ?? 0"
+            [totalWithEnergy]="materialOffer?.totalWithEnergy ?? 0"
+          ></app-fixed-material-offer>
         </p-tabpanel>
         <p-tabpanel value="2">
           <div class="border p-6 rounded border-gray-300 bg-white">

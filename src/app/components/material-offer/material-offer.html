@@ -24,7 +24,7 @@
           <th class="text-right">Cena (€)</th>
           <th class="text-right">Kolicina</th>
           <th style="min-width: 80px">JM</th>
-          <th class="text-right">Ukupna cena (€)</th>
+          <th style="text-align: right">Ukupna cena (€)</th>
           <th class="w-12"></th>
         </tr>
       </ng-template>
@@ -51,6 +51,7 @@
               [min]="0"
               [minFractionDigits]="2"
               [maxFractionDigits]="2"
+              locale="de-DE"
               inputStyleClass="w-32 text-right"
             ></p-inputnumber>
           </td>
@@ -65,6 +66,7 @@
               buttonLayout="horizontal"
               incrementButtonIcon="pi pi-plus"
               decrementButtonIcon="pi pi-minus"
+              locale="de-DE"
               inputStyleClass="w-20 text-right"
             ></p-inputnumber>
           </td>
@@ -76,7 +78,7 @@
               class="w-20 rounded border border-gray-300 px-2 py-1 outline-none focus:border-blue-500"
             />
           </td>
-          <td class="text-right font-semibold">
+          <td style="text-align: right" class="font-semibold">
             {{ option.price * option.quantity | number:'1.2-2' }}
           </td>
           <td>
@@ -93,14 +95,16 @@
       <ng-template #footer>
         <tr>
           <td colspan="5" class="text-right font-bold">UKUPNO:</td>
-          <td class="text-right font-bold">{{ total | number:'1.2-2' }} €</td>
+          <td style="text-align: right" class="font-bold">{{ total | number:'1.2-2' }} €</td>
           <td></td>
         </tr>
         <tr>
           <td colspan="5" class="text-right font-bold">
             Energetski dodatak ({{ energyPercent }}%):
           </td>
-          <td class="text-right font-bold">{{ total * energyPercent / 100 | number:'1.2-2' }} €</td>
+          <td style="text-align: right" class="font-bold">
+            {{ total * energyPercent / 100 | number:'1.2-2' }} €
+          </td>
           <td></td>
         </tr>
         <tr>
@@ -113,11 +117,14 @@
               [minFractionDigits]="0"
               [maxFractionDigits]="2"
               suffix="%"
+              locale="de-DE"
               inputStyleClass="w-16 text-right font-bold"
             ></p-inputnumber>
             energetski dodatak:
           </td>
-          <td class="text-right font-bold">{{ totalWithEnergy | number:'1.2-2' }} €</td>
+          <td style="text-align: right" class="font-bold">
+            {{ totalWithEnergy | number:'1.2-2' }} €
+          </td>
           <td></td>
         </tr>
         <tr>
@@ -127,12 +134,13 @@
               [(ngModel)]="transformerMass"
               [min]="0"
               [minFractionDigits]="0"
-              [maxFractionDigits]="2"
+              [maxFractionDigits]="0"
               suffix=" kg"
+              locale="de-DE"
               inputStyleClass="w-28 text-right font-bold"
             ></p-inputnumber>
           </td>
-          <td class="text-right font-bold">
+          <td style="text-align: right" class="font-bold">
             @if (transformerMass) { ({{ totalWithEnergy / transformerMass | number:'1.2-2' }} €/kg)
             }
           </td>

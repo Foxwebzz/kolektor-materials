@@ -7,11 +7,11 @@
       <tr>
         <th class="w-14">Poz.</th>
         <th>Naziv</th>
-        <th class="text-right w-28">Cena</th>
+        <th class="text-right w-28" style="text-align: center">Cena</th>
         <th class="text-right w-24">Kolicina</th>
         <th class="w-20">JM</th>
-        <th class="w-20">Grupa</th>
-        <th class="text-right w-32">Cena (€)</th>
+        <th class="w-20" style="text-align: center">Grupa</th>
+        <th class="w-42" style="text-align: center">Ukupna Cena (€)</th>
       </tr>
     </ng-template>
     <ng-template #body let-row>
@@ -23,11 +23,13 @@
       <tr>
         <td>{{ row.position }}.</td>
         <td>{{ row.name }}</td>
-        <td class="text-right">@if (row.price !== null) { {{ row.price | number : '1.2-2' }} }</td>
-        <td class="text-right">{{ row.quantity }}</td>
+        <td style="text-align: right">
+          @if (row.price !== null) { {{ row.price | number : '1.2-2' }} }
+        </td>
+        <td style="text-align: center">{{ row.quantity }}</td>
         <td>{{ row.unit }}</td>
-        <td>{{ row.group }}</td>
-        <td class="text-right font-semibold">
+        <td style="text-align: center">{{ row.group }}</td>
+        <td class="font-semibold" style="text-align: right">
           @if (row.total !== null) { {{ row.total | number : '1.2-2' }} }
         </td>
       </tr>
@@ -36,8 +38,34 @@
     <ng-template #footer>
       <tr>
         <td colspan="6" class="text-right font-bold">UKUPNO:</td>
-        <td class="text-right font-bold">{{ total() | number : '1.2-2' }}</td>
+        <td style="text-align: right" class="font-bold">{{ total() | number : '1.2-2' }} €</td>
       </tr>
+      <tr>
+        <td colspan="6" class="text-right font-bold">
+          Energetski dodatak ({{ energyPercent() }}%):
+        </td>
+        <td style="text-align: right" class="font-bold">
+          {{ total() * energyPercent() / 100 | number : '1.2-2' }} €
+        </td>
+      </tr>
+      <tr>
+        <td colspan="6" class="text-right font-bold">
+          Ukupna cena + {{ energyPercent() }}% energetski dodatak:
+        </td>
+        <td style="text-align: right" class="font-bold">
+          {{ totalWithEnergy() | number : '1.2-2' }} €
+        </td>
+      </tr>
+      @if (transformerMass()) {
+      <tr>
+        <td colspan="6" class="text-right font-bold">
+          Masa Transformatora: {{ transformerMass() | number : '1.0-0' }} kg
+        </td>
+        <td style="text-align: right" class="font-bold">
+          ({{ totalWithEnergy() / transformerMass()! | number : '1.2-2' }} €/kg)
+        </td>
+      </tr>
+      }
     </ng-template>
   </p-table>
 </div>

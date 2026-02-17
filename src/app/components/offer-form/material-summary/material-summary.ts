@@ -20,11 +20,11 @@ export class MaterialSummaryComponent {
 
   private readonly groupConfig: { code: string; name: string }[] = [
     { code: 'Cu', name: 'Bakar (Cu)' },
-    { code: 'Fe', name: 'Magnetna plocevina (Fe)' },
+    { code: 'Fe', name: 'Magnetno jezgro (Fe)' },
     { code: 'Fei', name: 'Celik (Fei)' },
     { code: 'Pap', name: 'Papir (Pap)' },
     { code: 'Oil', name: 'Ulje (Oil)' },
-    { code: 'h', name: 'Rad' },
+    { code: 'h', name: 'Rad (h)' },
     { code: 'n', name: 'Drugi materijali (n)' },
   ];
 

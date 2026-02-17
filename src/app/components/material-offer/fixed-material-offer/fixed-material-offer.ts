@@ -25,7 +25,7 @@ export interface FixedTableRow {
 export const FIXED_GROUPS: FixedGroupConfig[] = [
   {
     name: 'Magnetno jezgro',
-    titles: ['Magnetno Jezgro', 'Pritezne stranice'],
+    titles: ['Magnetno Jezgro'],
     startPos: 1,
     endPos: 2,
   },
@@ -113,4 +113,8 @@ export class FixedMaterialOfferComponent {
     this.version();
     return this.selectedOptions().reduce((sum, opt) => sum + opt.price * opt.quantity, 0);
   });
+
+  energyPercent = input(5);
+  transformerMass = input<number | null>(null);
+  totalWithEnergy = input(0);
 }

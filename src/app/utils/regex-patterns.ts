@@ -35,11 +35,37 @@ export function createPdfFieldRegex(label: string, terminators: string[]): RegEx
   return new RegExp(`${label}:\\s*(.*?)(?=\\s+(?:${terminatorPattern}|$))`, 'i');
 }
 
+// Known PDF field labels and table headers to filter out false matches
+const PDF_FIELD_LABELS = [
+  'Broj ponude', 'Broj tehnike', 'Kupac', 'Broj komada',
+  'Tip', 'Tip Transformatora', 'Komercijalista', 'Zemlja', 'Datum',
+  'Grupa', 'Cena', 'Udeo', 'Poz', 'Naziv', 'Kolicina', 'Ukupna cena',
+];
+
 // Helper function to extract field value from PDF text
 export function extractPdfField(text: string, label: string, terminators: string[]): string {
   const regex = createPdfFieldRegex(label, terminators);
   const match = text.match(regex);
-  return match?.[1]?.trim() ?? '';
+  const value = match?.[1]?.trim() ?? '';
+  // If the extracted value starts with a known label or table header, return empty
+  if (PDF_FIELD_LABELS.some((l) => value === l || value.startsWith(l + ':') || value.startsWith(l + ' '))) {
+    return '';
+  }
+  // Strip any trailing field label that got captured
+  let cleaned = value;
+  for (const l of PDF_FIELD_LABELS) {
+    const labelWithColon = l + ':';
+    const idx = cleaned.indexOf(labelWithColon);
+    if (idx > 0) {
+      cleaned = cleaned.substring(0, idx).trim();
+    }
+    // Also check for table headers without colon (e.g. "Grupa Cena...")
+    const idx2 = cleaned.indexOf(' ' + l + ' ');
+    if (idx2 >= 0) {
+      cleaned = cleaned.substring(0, idx2).trim();
+    }
+  }
+  return cleaned;
 }
 
 // Valid material group codes (from materials.data.ts)
