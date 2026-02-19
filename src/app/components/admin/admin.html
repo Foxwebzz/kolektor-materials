@@ -1,0 +1,144 @@
+<p-toast></p-toast>
+<p-confirmdialog></p-confirmdialog>
+
+<div class="m-6">
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-3">
+      <p-button icon="pi pi-arrow-left" [text]="true" (onClick)="goBack()"></p-button>
+      <h2 class="text-xl font-semibold m-0">Upravljanje materijalima</h2>
+    </div>
+    <p-button label="Dodaj kategoriju" icon="pi pi-plus" (onClick)="openCategoryDialog()"></p-button>
+  </div>
+
+  <p-table #dt [value]="materials" dataKey="_id" [loading]="loading">
+    <ng-template #header>
+      <tr>
+        <th style="width: 3rem"></th>
+        <th>Naziv</th>
+        <th>Broj opcija</th>
+        <th>Redosled</th>
+        <th style="width: 10rem">Akcije</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-material let-expanded="expanded">
+      <tr>
+        <td>
+          <p-button
+            type="button"
+            [text]="true"
+            [rounded]="true"
+            [icon]="isExpanded(material) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            (onClick)="toggleRow(material, $event)"
+          ></p-button>
+        </td>
+        <td>{{ material.title }}</td>
+        <td>{{ material.options?.length || 0 }}</td>
+        <td>{{ material.order }}</td>
+        <td>
+          <div class="flex gap-2">
+            <p-button icon="pi pi-pencil" [text]="true" severity="info" (onClick)="openCategoryDialog(material)"></p-button>
+            <p-button icon="pi pi-plus" [text]="true" severity="success" pTooltip="Dodaj opciju" (onClick)="openOptionDialog(material)"></p-button>
+            <p-button icon="pi pi-trash" [text]="true" severity="danger" (onClick)="confirmDeleteCategory(material)"></p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #expandedrow let-material>
+      <tr>
+        <td colspan="5">
+          <div class="p-4">
+            <p-table [value]="material.options" dataKey="_id">
+              <ng-template #header>
+                <tr>
+                  <th>Naziv</th>
+                  <th>Cena</th>
+                  <th>Jedinica</th>
+                  <th>Grupa</th>
+                  <th style="width: 8rem">Akcije</th>
+                </tr>
+              </ng-template>
+              <ng-template #body let-option>
+                <tr>
+                  <td>{{ option.name }}</td>
+                  <td>{{ option.price }}</td>
+                  <td>{{ option.unit }}</td>
+                  <td>{{ option.group }}</td>
+                  <td>
+                    <div class="flex gap-2">
+                      <p-button icon="pi pi-pencil" [text]="true" severity="info" (onClick)="openOptionDialog(material, option)"></p-button>
+                      <p-button icon="pi pi-trash" [text]="true" severity="danger" (onClick)="confirmDeleteOption(material, option)"></p-button>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template #emptymessage>
+                <tr>
+                  <td colspan="5" class="text-center text-gray-400">Nema opcija</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="5" class="text-center text-gray-400">Nema kategorija</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Category Dialog -->
+<p-dialog
+  [(visible)]="categoryDialogVisible"
+  [header]="editingCategory ? 'Izmeni kategoriju' : 'Nova kategorija'"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+>
+  <div class="flex flex-col gap-4 mt-2">
+    <div class="flex flex-col gap-1">
+      <label for="catTitle">Naziv</label>
+      <input pInputText id="catTitle" [(ngModel)]="categoryForm.title" />
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="catOrder">Redosled</label>
+      <p-inputnumber id="catOrder" [(ngModel)]="categoryForm.order" [showButtons]="true"></p-inputnumber>
+    </div>
+  </div>
+  <ng-template #footer>
+    <p-button label="Otkaži" [text]="true" (onClick)="categoryDialogVisible = false"></p-button>
+    <p-button label="Sačuvaj" (onClick)="saveCategory()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- Option Dialog -->
+<p-dialog
+  [(visible)]="optionDialogVisible"
+  [header]="editingOption ? 'Izmeni opciju' : 'Nova opcija'"
+  [modal]="true"
+  [style]="{ width: '450px' }"
+>
+  <div class="flex flex-col gap-4 mt-2">
+    <div class="flex flex-col gap-1">
+      <label for="optName">Naziv</label>
+      <input pInputText id="optName" [(ngModel)]="optionForm.name" />
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="optPrice">Cena</label>
+      <p-inputnumber id="optPrice" [(ngModel)]="optionForm.price" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputnumber>
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="optUnit">Jedinica</label>
+      <input pInputText id="optUnit" [(ngModel)]="optionForm.unit" />
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="optGroup">Grupa</label>
+      <p-select id="optGroup" [(ngModel)]="optionForm.group" [options]="groupOptions" placeholder="Izaberi grupu" appendTo="body"></p-select>
+    </div>
+  </div>
+  <ng-template #footer>
+    <p-button label="Otkaži" [text]="true" (onClick)="optionDialogVisible = false"></p-button>
+    <p-button label="Sačuvaj" (onClick)="saveOption()"></p-button>
+  </ng-template>
+</p-dialog>

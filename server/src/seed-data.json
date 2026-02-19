@@ -1,0 +1,232 @@
+[
+  {
+    "title": "Magnetno Jezgro",
+    "order": 0,
+    "options": [
+      { "name": "Magnetni lim 70H/23", "price": 7.5, "quantity": 1, "unit": "kg", "group": "Fe" },
+      { "name": "Magnetni lim 75H/23", "price": 7.5, "quantity": 1, "unit": "kg", "group": "Fe" },
+      { "name": "Magnetni lim 80H/23", "price": 7, "quantity": 1, "unit": "kg", "group": "Fe" },
+      { "name": "Magnetni lim 85H/23", "price": 7, "quantity": 1, "unit": "kg", "group": "Fe" },
+      { "name": "Magnetni lim 90H/23", "price": 6.5, "quantity": 1, "unit": "kg", "group": "Fe" },
+      { "name": "Magnetni lim MOH", "price": 5, "quantity": 1, "unit": "kg", "group": "Fe" },
+      { "name": "Magnetni lim 105H", "price": 6, "quantity": 1, "unit": "kg", "group": "Fe" },
+      { "name": "Magnetni lim M4", "price": 6, "quantity": 1, "unit": "kg", "group": "Fe" },
+      { "name": "Pritezne stranice 1", "price": 5000, "quantity": 1, "unit": "set", "group": "Fei" },
+      { "name": "Pritezne stranice 2", "price": 6000, "quantity": 1, "unit": "set", "group": "Fei" },
+      { "name": "Pritezne stranice 4", "price": 7000, "quantity": 1, "unit": "set", "group": "Fei" },
+      { "name": "Pritezne stranice 5", "price": 8000, "quantity": 1, "unit": "set", "group": "Fei" },
+      { "name": "Pritezne stranice 6", "price": 9000, "quantity": 1, "unit": "set", "group": "Fei" },
+      { "name": "Pritezne stranice 7", "price": 10000, "quantity": 1, "unit": "set", "group": "Fei" }
+    ]
+  },
+  {
+    "title": "Namotaji",
+    "order": 1,
+    "options": [
+      { "name": "Profilna lak žica", "price": 16.6, "quantity": 1, "unit": "kg", "group": "Cu" },
+      { "name": "Profilna žica sa papirnom izolacijom", "price": 17.2, "quantity": 1, "unit": "kg", "group": "Cu" },
+      { "name": "Bifilarna/Trifilarna žica", "price": 16.4, "quantity": 1, "unit": "kg", "group": "Cu" },
+      { "name": "CTC žica", "price": 17.4, "quantity": 1, "unit": "kg", "group": "Cu" },
+      { "name": "NTCTC Žica", "price": 17.5, "quantity": 1, "unit": "kg", "group": "Cu" },
+      { "name": "Okrugla lak žica", "price": 15.9, "quantity": 1, "unit": "kg", "group": "Cu" },
+      { "name": "Profilna žica sa papirnom izolacijom + term.nad.pap.", "price": 17.5, "quantity": 1, "unit": "kg", "group": "Cu" },
+      { "name": "Bifilarna/Trifilarna žica + term.nad.pap.", "price": 16.7, "quantity": 1, "unit": "kg", "group": "Cu" },
+      { "name": "Profilna lak žica + epoxy", "price": 16.9, "quantity": 1, "unit": "kg", "group": "Cu" },
+      { "name": "CTC žica + epoxy", "price": 17.7, "quantity": 1, "unit": "kg", "group": "Cu" },
+      { "name": "NTCTC Žica + epoxy", "price": 17.8, "quantity": 1, "unit": "kg", "group": "Cu" }
+    ]
+  },
+  {
+    "title": "Izolacija",
+    "order": 2,
+    "options": [
+      { "name": "Trafoboard", "price": 7.91, "quantity": 1, "unit": "kg", "group": "Pap" },
+      { "name": "IP/F kabl", "price": 18.4, "quantity": 1, "unit": "kg", "group": "Cu" },
+      { "name": "Ploce za stiskanje", "price": 5977, "quantity": 1, "unit": "m3", "group": "Pap" },
+      { "name": "Klobuki LI 170", "price": 1000, "quantity": 1, "unit": "kom", "group": "Pap" },
+      { "name": "Klobuki LI 250", "price": 3500, "quantity": 1, "unit": "kom", "group": "Pap" },
+      { "name": "Klobuki LI 325", "price": 4500, "quantity": 1, "unit": "kom", "group": "Pap" },
+      { "name": "Klobuki LI 450", "price": 6000, "quantity": 1, "unit": "kom", "group": "Pap" },
+      { "name": "Klobuki LI 550", "price": 7000, "quantity": 1, "unit": "kom", "group": "Pap" }
+    ]
+  },
+  {
+    "title": "Regulacija",
+    "order": 3,
+    "options": [
+      { "name": "Regulator VV III 250 Y 40", "price": 58000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VV III 400 Y 40", "price": 58000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VV III 600 Y 40", "price": 58000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VV III 250 Y 76", "price": 58000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VV III 400 Y 76", "price": 58000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VV III 600 Y 76", "price": 58000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VVS III 250 Y 40", "price": 54000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VVS III 400 Y 40", "price": 54000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VVS III 600 Y 40", "price": 54000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VVS III 250 Y 76", "price": 54000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VVS III 400 Y 76", "price": 54000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VVS III 600 Y 76", "price": 54000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VM III 300 Y 72,5", "price": 64000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VM III 350 Y 72,5", "price": 64000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VM III 500 Y 72,5", "price": 64000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VM III 650 Y 72,5", "price": 64000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VM III 300 Y 72,5", "price": 56000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VV III 250 Y 76", "price": 56000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VV III 400 Y 76", "price": 56000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VV III 600 Y 76", "price": 56000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VV III 600 Y 76", "price": 56000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VMS III 400 Y 123", "price": 59000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VRS III 1000 Y 72,5", "price": 85800, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VUBBRN 200/250", "price": 62000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VUBBRN 200/400", "price": 62000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VUBBRN 200/600", "price": 62000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VUBBRN 380/250", "price": 62000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VUBBRN 380/400", "price": 62000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator VUBBRN 380/600", "price": 62000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator CAPT 1", "price": 2000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator CAPT 2", "price": 3000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator EMC 1", "price": 1500, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator EMC 2", "price": 3000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Regulator DU + pogon", "price": 16000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Preklopka regulator", "price": 3000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Preklopka sprega", "price": 3000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Preklopka naponska", "price": 3000, "quantity": 1, "unit": "kom", "group": "n" }
+    ]
+  },
+  {
+    "title": "Ulje",
+    "order": 4,
+    "options": [
+      { "name": "Nynas Nytro 10XN", "price": 2.47, "quantity": 1, "unit": "kg", "group": "Oil" },
+      { "name": "Nynas Nytro 4000X", "price": 2.66, "quantity": 1, "unit": "kg", "group": "Oil" },
+      { "name": "Nynas Nytro Taurus", "price": 2.42, "quantity": 1, "unit": "kg", "group": "Oil" },
+      { "name": "Nynas Nytro Libra", "price": 2.48, "quantity": 1, "unit": "kg", "group": "Oil" },
+      { "name": "Nynas Nytro Lyra", "price": 2.48, "quantity": 1, "unit": "kg", "group": "Oil" },
+      { "name": "Shell Diala S4 ZX-I", "price": 2.33, "quantity": 1, "unit": "kg", "group": "Oil" },
+      { "name": "Ergon HYVOLT I", "price": 2.35, "quantity": 1, "unit": "kg", "group": "Oil" },
+      { "name": "Ergon HYVOLT III", "price": 2.4, "quantity": 1, "unit": "kg", "group": "Oil" },
+      { "name": "MIDEL 7131", "price": 7.08, "quantity": 1, "unit": "kg", "group": "Oil" },
+      { "name": "Nynas Nytro BIO 300x", "price": 5.95, "quantity": 1, "unit": "kg", "group": "Oil" }
+    ]
+  },
+  {
+    "title": "Trafo Sud",
+    "order": 5,
+    "options": [
+      { "name": "Trafo sud do 3000kg", "price": 13.85, "quantity": 1, "unit": "kg", "group": "Fei" },
+      { "name": "Trafo sud 3000-10000kg", "price": 13.31, "quantity": 1, "unit": "kg", "group": "Fei" },
+      { "name": "Trafo sud 10000-20000kg", "price": 13.2, "quantity": 1, "unit": "kg", "group": "Fei" },
+      { "name": "Magnetni zasloni", "price": 3.1, "quantity": 1, "unit": "kg", "group": "Fe" },
+      { "name": "Valovite stranice 0-200kg", "price": 16.8, "quantity": 1, "unit": "kg", "group": "Fei" },
+      { "name": "Valovite stranice 201-500kg", "price": 13.9, "quantity": 1, "unit": "kg", "group": "Fei" },
+      { "name": "Valovite stranice 501-1000kg", "price": 15.5, "quantity": 1, "unit": "kg", "group": "Fei" },
+      { "name": "Valovite stranice iznad 1000kg", "price": 13.9, "quantity": 1, "unit": "kg", "group": "Fei" }
+    ]
+  },
+  {
+    "title": "Hladjenje",
+    "order": 6,
+    "options": [
+      { "name": "Radijatori poc.", "price": 8.45, "quantity": 1, "unit": "kg", "group": "Fei" },
+      { "name": "Radijatori poc.+far.", "price": 10.11, "quantity": 1, "unit": "kg", "group": "Fei" },
+      { "name": "Radijatori poc.+far. OFF SHORE", "price": 11.9, "quantity": 1, "unit": "kg", "group": "Fei" }
+    ]
+  },
+  {
+    "title": "Izolatori",
+    "order": 7,
+    "options": [
+      { "name": "CRS 24kV/1250A", "price": 790, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "CRS 24kV/2000A", "price": 850, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "CRS 24kV/3150A", "price": 950, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "CRS 36kV/1250A", "price": 940, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "GSA 52", "price": 2570, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "GSA 73", "price": 2930, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "GSA 123", "price": 4550, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "GSA 145", "price": 5150, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "GOB 250/800", "price": 1500, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "GOB 250/1250", "price": 1900, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "GOB 325/800", "price": 1600, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "GOB 380/800", "price": 1750, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "GOB 380/1250", "price": 2150, "quantity": 1, "unit": "komg", "group": "n" },
+      { "name": "GOB 450/800", "price": 2110, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "GOB 550/800", "price": 2460, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "GOB 550/1250", "price": 2900, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 10NF250", "price": 120, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 20NF250", "price": 170, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 30NF250", "price": 200, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 10NF630", "price": 240, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 20NF630", "price": 260, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 30NF630", "price": 300, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 10NF1000", "price": 410, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 20NF1000", "price": 490, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 30NF1000", "price": 590, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 10NF2000", "price": 550, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 20NF2000", "price": 610, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 30NF2000", "price": 680, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 10NF3150", "price": 820, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 20NF3150", "price": 900, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Izolator 30NF3150", "price": 970, "quantity": 1, "unit": "kom", "group": "n" }
+    ]
+  },
+  {
+    "title": "Oprema",
+    "order": 8,
+    "options": [
+      { "name": "Kontaktni term. MT-ST 160SK/TT ", "price": 1610, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Kontaktni term. AKM 34 TD 111 ", "price": 1450, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Kontaktni term. OTI 425 ", "price": 1200, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Termicka slika MT-ST 160WR/TT", "price": 1690, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Termicka slika AKM 35 TD 111", "price": 1590, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Termicka slika WTI 425", "price": 1400, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Pt 100 sonda", "price": 220, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Buholc Rele BR50", "price": 650, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Buholc Rele BR80", "price": 810, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Buholc Rele EMB", "price": 950, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Buholc Rele MESSKO MBR50", "price": 3240, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Pok.niv.ulja COMEM OLI", "price": 760, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Pok.niv.ulja MTO-STF 160/TT", "price": 2090, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Ventil nadp. COMEM 170SC 50KPA", "price": 1010, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Ventil nadp. QUALITROL RPRR DIR", "price": 1050, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Dehidrator COMEM DA5", "price": 730, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Dehidrator MESSKO MTRAB", "price": 6440, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Dehidrator COMEM SDB", "price": 2200, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Strujni transformator", "price": 440, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Vazdušna membrana", "price": 650, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Komandni orman I", "price": 3000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Komandni orman II", "price": 5500, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Komandni orman III", "price": 7000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Komandni orman IIII", "price": 9000, "quantity": 1, "unit": "kom", "group": "n" }
+    ]
+  },
+  {
+    "title": "Dodatni zahtevi",
+    "order": 9,
+    "options": [
+      { "name": "Tockovi", "price": 3000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Temperatura okoline -40", "price": 2000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Merdevine", "price": 1000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Zaštita protiv padanja", "price": 3000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Odvodnici prenapona", "price": 8000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Dodatak AKZ", "price": 5000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "HYDRAN M2", "price": 16000, "quantity": 1, "unit": "kom", "group": "n" },
+      { "name": "Niska buka (reža, T-rebra...)", "price": 5000, "quantity": 1, "unit": "kom", "group": "n" }
+    ]
+  },
+  {
+    "title": "Transport",
+    "order": 10,
+    "options": [
+      { "name": "Ambalaža", "price": 1375, "quantity": 1, "unit": "m3", "group": "n" },
+      { "name": "Transport sa azotom", "price": 3000, "quantity": 1, "unit": "kom", "group": "n" }
+    ]
+  },
+  {
+    "title": "Rad",
+    "order": 11,
+    "options": [
+      { "name": "Proizvodni sati", "price": 63, "quantity": 1, "unit": "h", "group": "h" },
+      { "name": "Ostali materijal", "price": 15000, "quantity": 1, "unit": "kom", "group": "n" }
+    ]
+  }
+]

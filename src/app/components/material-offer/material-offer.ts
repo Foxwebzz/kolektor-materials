@@ -1,4 +1,4 @@
-import { Component, computed, input, output, ElementRef, viewChild } from '@angular/core';
+import { Component, computed, inject, input, OnInit, output, ElementRef, viewChild } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -8,7 +8,9 @@ import { ButtonModule } from 'primeng/button';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as pdfjsLib from 'pdfjs-dist';
-import { MaterialOption, MATERIALS } from '../materials/materials';
+import { MaterialOption } from '../materials/materials';
+import { Material } from '../materials/models/material.model';
+import { MaterialsService } from '../../services/materials.service';
 import { OfferFormComponent, OfferFormData } from '../offer-form/offer-form';
 import { FIXED_GROUPS } from './fixed-material-offer/fixed-material-offer';
 import { extractPdfField, GROUP_PATTERN } from '../../utils/regex-patterns';
@@ -29,7 +31,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
     OfferFormComponent,
   ],
 })
-export class MaterialOfferComponent {
+export class MaterialOfferComponent implements OnInit {
+  private materialsService = inject(MaterialsService);
+
   selectedOptions = input<MaterialOption[]>([]);
   quantityChanged = output<{ index: number; quantity: number }>();
   priceChanged = output<{ index: number; price: number }>();
@@ -55,7 +59,15 @@ export class MaterialOfferComponent {
     numberOfCommands: null,
   };
 
-  private readonly titleOrder = MATERIALS.map((m) => m.title);
+  private materialsData: Material[] = [];
+  private titleOrder: string[] = [];
+
+  ngOnInit() {
+    this.materialsService.getMaterials().subscribe((data) => {
+      this.materialsData = data;
+      this.titleOrder = data.map((m) => m.title);
+    });
+  }
 
   private readonly displayTitleMap: Record<string, string> = {};
 
@@ -599,7 +611,7 @@ export class MaterialOfferComponent {
 
   private findMaterialInfo(name: string): { group: string; title?: string } {
     const normalizedName = name.toLowerCase().trim();
-    for (const material of MATERIALS) {
+    for (const material of this.materialsData) {
       for (const option of material.options) {
         if (option.name.toLowerCase().trim() === normalizedName) {
           return { group: option.group, title: material.title };

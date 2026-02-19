@@ -1,13 +1,12 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, OnInit, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Material, MaterialOption } from './models/material.model';
-import { MATERIALS } from './data/materials.data';
+import { MaterialsService } from '../../services/materials.service';
 import { enterLeaveHeightAnimation } from '../../../animations/enter-leave-height.animation';
 
 export type { Material, MaterialOption } from './models/material.model';
-export { MATERIALS } from './data/materials.data';
 
 @Component({
   selector: 'app-materials',
@@ -15,12 +14,20 @@ export { MATERIALS } from './data/materials.data';
   imports: [ButtonModule, InputTextModule, FormsModule],
   animations: [enterLeaveHeightAnimation],
 })
-export class MaterialsComponent {
+export class MaterialsComponent implements OnInit {
+  private materialsService = inject(MaterialsService);
+
   selectedOptions = input<MaterialOption[]>([]);
   optionSelected = output<MaterialOption>();
-  materials = MATERIALS;
+  materials: Material[] = [];
   expandedMaterial: Material | null = null;
   searchTerm = '';
+
+  ngOnInit() {
+    this.materialsService.getMaterials().subscribe((data) => {
+      this.materials = data;
+    });
+  }
 
   onMaterialClick(material: Material) {
     this.expandedMaterial = this.expandedMaterial === material ? null : material;

@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
+import { TooltipModule } from 'primeng/tooltip';
 import { MaterialsComponent, MaterialOption } from '../materials/materials';
 import { MaterialOfferComponent } from '../material-offer/material-offer';
 import { FixedMaterialOfferComponent } from '../material-offer/fixed-material-offer/fixed-material-offer';
@@ -9,7 +11,7 @@ import { MaterialSummaryComponent } from '../offer-form/material-summary/materia
 @Component({
   selector: 'app-home',
   templateUrl: './home.html',
-  imports: [ButtonModule, TabsModule, MaterialsComponent, MaterialOfferComponent, FixedMaterialOfferComponent, MaterialSummaryComponent],
+  imports: [RouterLink, ButtonModule, TabsModule, TooltipModule, MaterialsComponent, MaterialOfferComponent, FixedMaterialOfferComponent, MaterialSummaryComponent],
 })
 export class HomeComponent {
   @ViewChild(MaterialOfferComponent) materialOffer!: MaterialOfferComponent;

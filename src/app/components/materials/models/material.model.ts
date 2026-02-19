@@ -1,4 +1,5 @@
 export interface MaterialOption {
+  _id?: string;
   name: string;
   title?: string;
   price: number;
@@ -8,6 +9,8 @@ export interface MaterialOption {
 }
 
 export interface Material {
+  _id?: string;
   title: string;
   options: MaterialOption[];
+  order?: number;
 }

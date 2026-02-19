@@ -6,6 +6,9 @@
         <p-tab value="0">Predkalkulacija</p-tab>
         <p-tab value="1">Pregled predkalkulacije</p-tab>
         <p-tab value="2">Pregled po grupama</p-tab>
+        <div class="ml-auto flex items-center">
+          <p-button icon="pi pi-cog" [text]="true" [rounded]="true" routerLink="/admin" pTooltip="Upravljanje materijalima"></p-button>
+        </div>
       </p-tablist>
       <p-tabpanels style="padding: 1rem 0" class="h-full">
         <p-tabpanel value="0">
