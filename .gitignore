@@ -8,8 +8,13 @@
 
 # Node
 /node_modules
+node_modules/
 npm-debug.log
 yarn-error.log
+
+# Environment files
+.env
+*.env
 
 # IDEs and editors
 .idea/
