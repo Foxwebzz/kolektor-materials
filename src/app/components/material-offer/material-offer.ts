@@ -9,7 +9,11 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as pdfjsLib from 'pdfjs-dist';
 import { MaterialOption, MATERIALS } from '../materials/materials';
-import { OfferFormComponent, OfferFormData } from '../offer-form/offer-form';
+import {
+  OfferFormComponent,
+  OfferFormData,
+  createDefaultOfferFormData,
+} from '../offer-form/offer-form';
 import { FIXED_GROUPS } from './fixed-material-offer/fixed-material-offer';
 import { extractPdfField, GROUP_PATTERN } from '../../utils/regex-patterns';
 import { registerFonts } from '../../utils/pdf-fonts';
@@ -43,17 +47,7 @@ export class MaterialOfferComponent {
   energyPercent = 5;
   transformerMass: number | null = null;
   date: Date | null = new Date();
-  formData: OfferFormData = {
-    offerCode: '',
-    offerSuffix: '.1.1',
-    customerName: '',
-    transformerType: '',
-    salespersonName: '',
-    country: '',
-    technicalCode: '',
-    technicalSuffix: '.0',
-    numberOfCommands: null,
-  };
+  formData: OfferFormData = createDefaultOfferFormData();
 
   private readonly titleOrder = MATERIALS.map((m) => m.title);
 
@@ -95,10 +89,6 @@ export class MaterialOfferComponent {
 
   get totalWithEnergy(): number {
     return this.total * (1 + this.energyPercent / 100);
-  }
-
-  get yearSuffix(): string {
-    return new Date().getFullYear().toString().slice(-2);
   }
 
   onQuantityChange(index: number, quantity: number) {
@@ -146,10 +136,10 @@ export class MaterialOfferComponent {
     doc.text(`Datum: ${this.formatDate(this.date)}`, 135, 20);
 
     const brojPonude = this.formData.offerCode
-      ? `P${this.yearSuffix}-${this.formData.offerCode}${this.formData.offerSuffix}`
+      ? `${this.formData.offerPrefix}${this.formData.offerCode}${this.formData.offerSuffix}`
       : '';
     const brojTehnike = this.formData.technicalCode
-      ? `T${this.yearSuffix}-${this.formData.technicalCode}${this.formData.technicalSuffix}`
+      ? `${this.formData.technicalPrefix}${this.formData.technicalCode}${this.formData.technicalSuffix}`
       : '';
 
     let yPos = 45;
@@ -400,10 +390,10 @@ export class MaterialOfferComponent {
     }
 
     const savePonude = this.formData.offerCode
-      ? `P${this.yearSuffix}-${this.formData.offerCode}${this.formData.offerSuffix}`
+      ? `${this.formData.offerPrefix}${this.formData.offerCode}${this.formData.offerSuffix}`
       : 'P';
     const saveTehnike = this.formData.technicalCode
-      ? `T${this.yearSuffix}-${this.formData.technicalCode}${this.formData.technicalSuffix}`
+      ? `${this.formData.technicalPrefix}${this.formData.technicalCode}${this.formData.technicalSuffix}`
       : 'T';
     doc.save(`KALKP_${savePonude}_${saveTehnike}.pdf`);
   }
@@ -490,15 +480,19 @@ export class MaterialOfferComponent {
       this.date = new Date(year, month - 1, day);
     }
 
-    // Extract Broj ponude: P26-CODE+SUFFIX format (e.g. P26-0015.1.1)
-    const offerMatch = text.match(/Broj ponude:\s*P\d{2}-(\d+)(\.[\d.]+)/);
-    const offerCode = offerMatch?.[1] ?? '';
-    const offerSuffix = offerMatch?.[2] ?? '.1.1';
+    const defaults = createDefaultOfferFormData();
 
-    // Extract Broj tehnike: T26-CODE+SUFFIX format (e.g. T26-0015.0)
-    const techMatch = text.match(/Broj tehnike:\s*T\d{2}-(\d+)(\.[\d.]+)/);
-    const technicalCode = techMatch?.[1] ?? '';
-    const technicalSuffix = techMatch?.[2] ?? '.0';
+    // Extract Broj ponude: <prefix><code><suffix> (e.g. P26-0015.1.1)
+    const offerMatch = text.match(/Broj ponude:\s*(\S*?-)(\d+)(\.[\d.]+)/);
+    const offerPrefix = offerMatch?.[1] ?? defaults.offerPrefix;
+    const offerCode = offerMatch?.[2] ?? '';
+    const offerSuffix = offerMatch?.[3] ?? '.1.1';
+
+    // Extract Broj tehnike: <prefix><code><suffix> (e.g. T26-0015.0)
+    const techMatch = text.match(/Broj tehnike:\s*(\S*?-)(\d+)(\.[\d.]+)/);
+    const technicalPrefix = techMatch?.[1] ?? defaults.technicalPrefix;
+    const technicalCode = techMatch?.[2] ?? '';
+    const technicalSuffix = techMatch?.[3] ?? '.0';
 
     const customerName = extractPdfField(text, 'Kupac', ['Broj komada:', 'Tip:']);
 
@@ -510,8 +504,10 @@ export class MaterialOfferComponent {
     const country = extractPdfField(text, 'Zemlja', ['Grupa', 'Poz.']);
 
     this.formData = {
+      offerPrefix,
       offerCode,
       offerSuffix,
+      technicalPrefix,
       technicalCode,
       technicalSuffix,
       customerName,
