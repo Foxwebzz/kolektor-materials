@@ -172,7 +172,7 @@ export const MATERIALS: Material[] = [
       { name: 'GOB 250/1250', price: 1900, quantity: 1, unit: 'kom', group: 'n' },
       { name: 'GOB 325/800', price: 1600, quantity: 1, unit: 'kom', group: 'n' },
       { name: 'GOB 380/800', price: 1750, quantity: 1, unit: 'kom', group: 'n' },
-      { name: 'GOB 380/1250', price: 2150, quantity: 1, unit: 'komg', group: 'n' },
+      { name: 'GOB 380/1250', price: 2150, quantity: 1, unit: 'kom', group: 'n' },
       { name: 'GOB 450/800', price: 2110, quantity: 1, unit: 'kom', group: 'n' },
       { name: 'GOB 550/800', price: 2460, quantity: 1, unit: 'kom', group: 'n' },
       { name: 'GOB 550/1250', price: 2900, quantity: 1, unit: 'kom', group: 'n' },
