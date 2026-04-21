@@ -569,14 +569,24 @@ export class MaterialOfferComponent {
         title: titleMatch[1],
       });
     }
-    const titleAt = (pos: number): string | undefined => {
+    // Use the last title marker at or before `end` — include titles that fall inside
+    // the match region, since pdfjs can emit the row's position number before the
+    // section title at the same y-coordinate.
+    const titleAt = (end: number): string | undefined => {
       let current: string | undefined;
       for (const m of titleMarkers) {
-        if (m.index < pos) current = m.title;
+        if (m.index < end) current = m.title;
         else break;
       }
       return current;
     };
+
+    // Blank out the section titles so the non-greedy name capture below can't swallow
+    // them — pdfjs sometimes extracts the header label inline with row data. Replace
+    // with same-length whitespace to keep indices aligned with `titleMarkers`.
+    const parseText = titleMarkers.reduce((acc, m) => {
+      return acc.slice(0, m.index) + ' '.repeat(m.title.length) + acc.slice(m.index + m.title.length);
+    }, tableText);
 
     // Try new format first (with Grupa column at the end)
     // Row format: "1 MaterialName 7,00 12.800 kg 89.600,00 Fe" (de-DE format)
@@ -586,8 +596,11 @@ export class MaterialOfferComponent {
     );
 
     let match;
-    while ((match = newFormatRegex.exec(tableText)) !== null) {
-      const name = match[2].trim();
+    while ((match = newFormatRegex.exec(parseText)) !== null) {
+      const pos = match[1];
+      // Strip a duplicate of the position number at the start of the name — pdfjs
+      // sometimes emits the position twice across the section-title boundary.
+      const name = match[2].trim().replace(new RegExp(`^${pos}\\s+`), '');
       const price = parseFloat(match[3].replace(/\./g, '').replace(',', '.'));
       const quantity = parseFloat(match[4].replace(/\./g, '').replace(',', '.'));
       const unit = match[5];
@@ -595,7 +608,7 @@ export class MaterialOfferComponent {
 
       if (name && !isNaN(price) && !isNaN(quantity)) {
         const info = this.findMaterialInfo(name);
-        const title = info.title ?? titleAt(match.index);
+        const title = info.title ?? titleAt(match.index + match[0].length);
         materials.push({ name, price, quantity, unit, group, title });
       }
     }
@@ -606,15 +619,16 @@ export class MaterialOfferComponent {
     // Row format: "1 MaterialName 7,00 12.800 kg 89.600,00" (de-DE format)
     const legacyRegex = /(\d+)\s+(.+?)\s+([\d.]+,\d{2})\s+([\d.,]+)\s+(\S+)\s+([\d.]+,\d{2})/g;
 
-    while ((match = legacyRegex.exec(tableText)) !== null) {
-      const name = match[2].trim();
+    while ((match = legacyRegex.exec(parseText)) !== null) {
+      const pos = match[1];
+      const name = match[2].trim().replace(new RegExp(`^${pos}\\s+`), '');
       const price = parseFloat(match[3].replace(/\./g, '').replace(',', '.'));
       const quantity = parseFloat(match[4].replace(/\./g, '').replace(',', '.'));
       const unit = match[5];
 
       if (name && !isNaN(price) && !isNaN(quantity)) {
         const info = this.findMaterialInfo(name);
-        const title = info.title ?? titleAt(match.index);
+        const title = info.title ?? titleAt(match.index + match[0].length);
         materials.push({ name, price, quantity, unit, group: info.group, title });
       }
     }
