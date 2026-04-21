@@ -1,5 +1,10 @@
-<div class="grid grid-cols-[300px_1fr] gap-6 m-6 min-h-[calc(100dvh-3rem)]">
-  <app-materials [selectedOptions]="selectedOptions" (optionSelected)="onOptionSelected($event)"></app-materials>
+<div class="grid grid-cols-[300px_1fr] m-6 min-h-[calc(100dvh-3rem)]">
+  <div class="max-h-[calc(100dvh-2rem)] overflow-y-auto pe-6">
+    <app-materials
+      [selectedOptions]="selectedOptions"
+      (optionSelected)="onOptionSelected($event)"
+    ></app-materials>
+  </div>
   <div class="h-full">
     <p-tabs value="0" class="h-full">
       <p-tablist>
