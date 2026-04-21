@@ -552,8 +552,31 @@ export class MaterialOfferComponent {
     // Remove UKUPNO footers and table headers to prevent false regex matches
     const tableText = text
       .substring(tableStartIndex)
-      .replace(/Poz\.?\s*Naziv\s*Cena\s*Kolicina\s*JM\s*Ukupna cena\s*\([^)]*\)(\s*Grupa)?/gi, ' ')
+      .replace(/Poz\.?\s*Naziv\s*Cena\s*(?:\([^)]*\))?\s*Kolicina\s*JM\s*Ukupna cena\s*(?:\([^)]*\))?\s*(?:Grupa)?/gi, ' ')
       .replace(/UKUPNO:?\s*[\d,.]+/gi, ' ');
+
+    // Locate section-title markers (e.g. "Rad", "Izolatori") so items whose names
+    // were edited and no longer match MATERIALS still retain their group heading.
+    const titlePattern = this.titleOrder
+      .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+      .join('|');
+    const titleRegex = new RegExp(`(?:^|\\s)(${titlePattern})(?=\\s|$)`, 'g');
+    const titleMarkers: { index: number; title: string }[] = [];
+    let titleMatch: RegExpExecArray | null;
+    while ((titleMatch = titleRegex.exec(tableText)) !== null) {
+      titleMarkers.push({
+        index: titleMatch.index + titleMatch[0].length - titleMatch[1].length,
+        title: titleMatch[1],
+      });
+    }
+    const titleAt = (pos: number): string | undefined => {
+      let current: string | undefined;
+      for (const m of titleMarkers) {
+        if (m.index < pos) current = m.title;
+        else break;
+      }
+      return current;
+    };
 
     // Try new format first (with Grupa column at the end)
     // Row format: "1 MaterialName 7,00 12.800 kg 89.600,00 Fe" (de-DE format)
@@ -572,7 +595,8 @@ export class MaterialOfferComponent {
 
       if (name && !isNaN(price) && !isNaN(quantity)) {
         const info = this.findMaterialInfo(name);
-        materials.push({ name, price, quantity, unit, group, title: info.title });
+        const title = info.title ?? titleAt(match.index);
+        materials.push({ name, price, quantity, unit, group, title });
       }
     }
 
@@ -590,7 +614,8 @@ export class MaterialOfferComponent {
 
       if (name && !isNaN(price) && !isNaN(quantity)) {
         const info = this.findMaterialInfo(name);
-        materials.push({ name, price, quantity, unit, group: info.group, title: info.title });
+        const title = info.title ?? titleAt(match.index);
+        materials.push({ name, price, quantity, unit, group: info.group, title });
       }
     }
 
