@@ -11,6 +11,7 @@ export interface OfferFormData {
   customerName: string;
   transformerType: string;
   salespersonName: string;
+  designerName: string;
   country: string;
   technicalPrefix: string;
   technicalCode: string;
@@ -27,6 +28,7 @@ export function createDefaultOfferFormData(): OfferFormData {
     customerName: '',
     transformerType: '',
     salespersonName: '',
+    designerName: '',
     country: '',
     technicalPrefix: `T${yearSuffix}-`,
     technicalCode: '',

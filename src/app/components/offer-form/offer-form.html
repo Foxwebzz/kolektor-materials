@@ -104,5 +104,14 @@
         (ngModelChange)="updateField('salespersonName', $event)"
       />
     </div>
+    <div class="flex flex-col gap-1">
+      <label for="designerName" class="font-medium">Projektant:</label>
+      <input
+        pInputText
+        id="designerName"
+        [ngModel]="formData().designerName"
+        (ngModelChange)="updateField('designerName', $event)"
+      />
+    </div>
   </div>
 </div>

@@ -38,8 +38,10 @@ export function createPdfFieldRegex(label: string, terminators: string[]): RegEx
 // Known PDF field labels and table headers to filter out false matches
 const PDF_FIELD_LABELS = [
   'Broj ponude', 'Broj tehnike', 'Kupac', 'Broj komada',
-  'Tip', 'Tip Transformatora', 'Komercijalista', 'Zemlja', 'Datum',
+  'Tip', 'Tip Transformatora', 'Komercijalista', 'Projektant', 'Zemlja', 'Datum',
   'Grupa', 'Cena', 'Udeo', 'Poz', 'Naziv', 'Kolicina', 'Ukupna cena',
+  'UKUPNO', 'Energetski dodatak', 'Masa Transformatora',
+  'Ukupna cena materijala', 'Proizvodni sati',
 ];
 
 // Helper function to extract field value from PDF text

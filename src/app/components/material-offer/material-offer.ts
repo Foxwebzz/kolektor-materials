@@ -91,6 +91,20 @@ export class MaterialOfferComponent {
     return this.total * (1 + this.energyPercent / 100);
   }
 
+  /** Everything except the labour group ('h' — Rad). */
+  get materialsTotal(): number {
+    return this.selectedOptions()
+      .filter((opt) => opt.group !== 'h')
+      .reduce((sum, opt) => sum + opt.price * opt.quantity, 0);
+  }
+
+  /** The labour group ('h' — Rad) only. */
+  get laborTotal(): number {
+    return this.selectedOptions()
+      .filter((opt) => opt.group === 'h')
+      .reduce((sum, opt) => sum + opt.price * opt.quantity, 0);
+  }
+
   onQuantityChange(index: number, quantity: number) {
     this.quantityChanged.emit({ index, quantity });
   }
@@ -133,7 +147,7 @@ export class MaterialOfferComponent {
     doc.text('PREDKALKULACIJA', 14, 30);
 
     doc.setFontSize(10);
-    doc.text(`Datum: ${this.formatDate(this.date)}`, 135, 20);
+    doc.text(`Datum: ${this.formatDate(this.date)}`, 120, 20);
 
     const brojPonude = this.formData.offerCode
       ? `${this.formData.offerPrefix}${this.formData.offerCode}${this.formData.offerSuffix}`
@@ -144,20 +158,25 @@ export class MaterialOfferComponent {
 
     let yPos = 45;
     doc.text(`Broj ponude: ${brojPonude}`, 14, yPos);
-    doc.text(`Broj tehnike: ${brojTehnike}`, 135, yPos);
+    doc.text(`Broj tehnike: ${brojTehnike}`, 120, yPos);
     yPos += 7;
     doc.text(`Kupac: ${this.formData.customerName}`, 14, yPos);
-    doc.text(`Broj komada: ${this.formData.numberOfCommands ?? ''}`, 135, yPos);
+    doc.text(`Broj komada: ${this.formData.numberOfCommands ?? ''}`, 120, yPos);
     yPos += 7;
     doc.text(`Tip: ${this.formData.transformerType}`, 14, yPos);
-    doc.text(`Komercijalista: ${this.formData.salespersonName}`, 135, yPos);
+    doc.text(`Komercijalista: ${this.formData.salespersonName}`, 120, yPos);
     yPos += 7;
     doc.text(`Zemlja: ${this.formData.country}`, 14, yPos);
+    doc.text(`Projektant: ${this.formData.designerName}`, 120, yPos);
+
+    // Totals block, between the header fields and the group summary table.
+    // The transformer mass row is pinned to the bottom of this page instead.
+    const totalsEndY = this.drawTotals(doc, yPos + 14);
 
     // Material summary table
     const groupSummaryData = this.getGroupSummaryData();
     autoTable(doc, {
-      startY: yPos + 10,
+      startY: totalsEndY + 12,
       head: [
         [
           'Grupa',
@@ -206,8 +225,15 @@ export class MaterialOfferComponent {
       ]);
     }
 
+    // Transformer mass pinned to the bottom of page 1
+    this.drawTransformerMass(doc, doc.internal.pageSize.getHeight() - 20);
+
+    // Materials table starts on its own page — page 1 holds only the header,
+    // the totals block and the group summary table.
+    doc.addPage();
+
     autoTable(doc, {
-      startY: (doc as any).lastAutoTable.finalY + 15,
+      startY: 20,
       head: [
         [
           'Poz.',
@@ -234,50 +260,10 @@ export class MaterialOfferComponent {
       },
     });
 
-    // Footer drawn manually below the table
-    const finalY = (doc as any).lastAutoTable.finalY;
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const marginLeft = 14;
-    const valueX = pageWidth - 14;
-    let footY = finalY + 8;
-
-    doc.setFontSize(10);
-    doc.setFont('Roboto', 'bold');
-
-    doc.text('UKUPNO:', marginLeft, footY);
-    doc.text(`${this.formatNumber(this.total)} €`, valueX, footY, { align: 'right' });
-
-    footY += 7;
-    doc.text(`Energetski dodatak (${this.energyPercent}%):`, marginLeft, footY);
-    doc.text(`${this.formatNumber((this.total * this.energyPercent) / 100)} €`, valueX, footY, {
-      align: 'right',
-    });
-
-    footY += 7;
-    doc.text(`Ukupna cena + ${this.energyPercent}% energetski dodatak:`, marginLeft, footY);
-    doc.text(`${this.formatNumber(this.totalWithEnergy)} €`, valueX, footY, { align: 'right' });
-
-    if (this.transformerMass) {
-      footY += 4;
-      doc.setDrawColor(150, 150, 150);
-      doc.line(marginLeft, footY, valueX, footY);
-      footY += 7;
-      doc.text(
-        `Masa Transformatora: ${Math.round(this.transformerMass!)} kg`,
-        marginLeft,
-        footY
-      );
-      doc.text(
-        `${this.formatNumber(this.totalWithEnergy / this.transformerMass)} €/kg`,
-        valueX,
-        footY,
-        { align: 'right' }
-      );
-    }
-
     // Fixed material offer table (Pregled predkalkulacije)
     doc.addPage();
     doc.setFontSize(14);
+    doc.setFont('Roboto', 'bold');
     doc.text('PREGLED PREDKALKULACIJE', 14, 20);
 
     const options = this.selectedOptions();
@@ -348,47 +334,6 @@ export class MaterialOfferComponent {
       },
     });
 
-    // Fixed table footer
-    const fixedFinalY = (doc as any).lastAutoTable.finalY;
-    let fixedFootY = fixedFinalY + 8;
-    doc.setFontSize(10);
-    doc.setFont('Roboto', 'bold');
-    doc.text('UKUPNO:', marginLeft, fixedFootY);
-    doc.text(`${this.formatNumber(this.total)} €`, valueX, fixedFootY, { align: 'right' });
-
-    fixedFootY += 7;
-    doc.text(`Energetski dodatak (${this.energyPercent}%):`, marginLeft, fixedFootY);
-    doc.text(
-      `${this.formatNumber((this.total * this.energyPercent) / 100)} €`,
-      valueX,
-      fixedFootY,
-      { align: 'right' }
-    );
-
-    fixedFootY += 7;
-    doc.text(`Ukupna cena + ${this.energyPercent}% energetski dodatak:`, marginLeft, fixedFootY);
-    doc.text(`${this.formatNumber(this.totalWithEnergy)} €`, valueX, fixedFootY, {
-      align: 'right',
-    });
-
-    if (this.transformerMass) {
-      fixedFootY += 4;
-      doc.setDrawColor(150, 150, 150);
-      doc.line(marginLeft, fixedFootY, valueX, fixedFootY);
-      fixedFootY += 7;
-      doc.text(
-        `Masa Transformatora: ${Math.round(this.transformerMass!)} kg`,
-        marginLeft,
-        fixedFootY
-      );
-      doc.text(
-        `${this.formatNumber(this.totalWithEnergy / this.transformerMass)} €/kg`,
-        valueX,
-        fixedFootY,
-        { align: 'right' }
-      );
-    }
-
     const savePonude = this.formData.offerCode
       ? `${this.formData.offerPrefix}${this.formData.offerCode}${this.formData.offerSuffix}`
       : 'P';
@@ -396,6 +341,61 @@ export class MaterialOfferComponent {
       ? `${this.formData.technicalPrefix}${this.formData.technicalCode}${this.formData.technicalSuffix}`
       : 'T';
     doc.save(`KALKP_${savePonude}_${saveTehnike}.pdf`);
+  }
+
+  /** Draws the totals block starting at `startY`; returns the y of its last line. */
+  private drawTotals(doc: jsPDF, startY: number): number {
+    const marginLeft = 14;
+    const valueX = doc.internal.pageSize.getWidth() - 14;
+    let y = startY;
+
+    doc.setFontSize(10);
+    doc.setFont('Roboto', 'bold');
+
+    const rows: [string, number][] = [
+      ['Ukupna cena materijala:', this.materialsTotal],
+      ['Proizvodni sati:', this.laborTotal],
+      [`Energetski dodatak (${this.energyPercent}%):`, (this.total * this.energyPercent) / 100],
+      ['Ukupna cena:', this.totalWithEnergy],
+    ];
+
+    const rowGap = 7;
+    rows.forEach(([label, value], index) => {
+      const isLast = index === rows.length - 1;
+      // The grand total gets a double gap with its separator centred in it,
+      // so the whitespace above and below the line matches.
+      if (index > 0) y += isLast ? rowGap * 2 : rowGap;
+      if (isLast) {
+        doc.setDrawColor(150, 150, 150);
+        doc.line(marginLeft, y - rowGap - 1, valueX, y - rowGap - 1);
+      }
+      doc.text(label, marginLeft, y);
+      doc.text(`${this.formatNumber(value)} €`, valueX, y, { align: 'right' });
+    });
+
+    doc.setFont('Roboto', 'normal');
+    return y;
+  }
+
+  /** Draws the transformer mass row (with its separator line) at `y`; returns `y`. */
+  private drawTransformerMass(doc: jsPDF, y: number): number {
+    if (!this.transformerMass) return y;
+
+    const marginLeft = 14;
+    const valueX = doc.internal.pageSize.getWidth() - 14;
+
+    doc.setFontSize(10);
+    doc.setFont('Roboto', 'bold');
+    doc.setDrawColor(150, 150, 150);
+    doc.line(marginLeft, y - 7, valueX, y - 7);
+
+    doc.text(`Masa Transformatora: ${Math.round(this.transformerMass)} kg`, marginLeft, y);
+    doc.text(`${this.formatNumber(this.totalWithEnergy / this.transformerMass)} €/kg`, valueX, y, {
+      align: 'right',
+    });
+
+    doc.setFont('Roboto', 'normal');
+    return y;
   }
 
   private formatNumber(value: number): string {
@@ -501,7 +501,13 @@ export class MaterialOfferComponent {
 
     const transformerType = extractPdfField(text, 'Tip', ['Komercijalista:', 'Zemlja:']);
     const salespersonName = extractPdfField(text, 'Komercijalista', ['Zemlja:', 'Grupa', 'Poz.']);
-    const country = extractPdfField(text, 'Zemlja', ['Grupa', 'Poz.']);
+    const country = extractPdfField(text, 'Zemlja', ['Projektant:', 'Grupa', 'Poz.']);
+    const designerName = extractPdfField(text, 'Projektant', [
+      'Ukupna cena materijala:',
+      'UKUPNO:',
+      'Grupa',
+      'Poz.',
+    ]);
 
     this.formData = {
       offerPrefix,
@@ -514,10 +520,15 @@ export class MaterialOfferComponent {
       numberOfCommands,
       transformerType,
       salespersonName,
+      designerName,
       country,
     };
 
-    const energyMatch = text.match(/Ukupna cena \+\s*([\d.,]+)%\s*energetski dodatak/);
+    // Current layout prints "Energetski dodatak (5%):"; older PDFs printed
+    // "Ukupna cena + 5% energetski dodatak" instead.
+    const energyMatch =
+      text.match(/Energetski dodatak\s*\(([\d.,]+)%\)/) ??
+      text.match(/Ukupna cena \+\s*([\d.,]+)%\s*energetski dodatak/);
     if (energyMatch) {
       this.energyPercent = parseFloat(energyMatch[1].replace(/,/g, ''));
     }
@@ -548,7 +559,10 @@ export class MaterialOfferComponent {
     // Remove UKUPNO footers and table headers to prevent false regex matches
     const tableText = text
       .substring(tableStartIndex)
-      .replace(/Poz\.?\s*Naziv\s*Cena\s*(?:\([^)]*\))?\s*Kolicina\s*JM\s*Ukupna cena\s*(?:\([^)]*\))?\s*(?:Grupa)?/gi, ' ')
+      .replace(
+        /Poz\.?\s*Naziv\s*Cena\s*(?:\([^)]*\))?\s*Kolicina\s*JM\s*Ukupna cena\s*(?:\([^)]*\))?\s*(?:Grupa)?/gi,
+        ' '
+      )
       .replace(/UKUPNO:?\s*[\d,.]+/gi, ' ');
 
     // Locate section-title markers (e.g. "Rad", "Izolatori") so items whose names
@@ -581,7 +595,9 @@ export class MaterialOfferComponent {
     // them — pdfjs sometimes extracts the header label inline with row data. Replace
     // with same-length whitespace to keep indices aligned with `titleMarkers`.
     const parseText = titleMarkers.reduce((acc, m) => {
-      return acc.slice(0, m.index) + ' '.repeat(m.title.length) + acc.slice(m.index + m.title.length);
+      return (
+        acc.slice(0, m.index) + ' '.repeat(m.title.length) + acc.slice(m.index + m.title.length)
+      );
     }, tableText);
 
     // Try new format first (with Grupa column at the end)
