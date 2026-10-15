@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as pdfjsLib from 'pdfjs-dist';
+import * as XLSX from 'xlsx';
 import { MaterialOption, MATERIALS } from '../materials/materials';
 import {
   OfferFormComponent,
@@ -334,13 +335,53 @@ export class MaterialOfferComponent {
       },
     });
 
-    const savePonude = this.formData.offerCode
+    doc.save(`${this.baseFileName()}.pdf`);
+  }
+
+  /** Materials in table order, one row each — no group title rows. */
+  saveToExcel() {
+    const rows = this.sortedOptions().map((opt, index) => ({
+      'Poz.': index + 1,
+      Naziv: opt.name,
+      'Cena (€)': opt.price,
+      Kolicina: opt.quantity,
+      JM: opt.unit,
+      'Ukupna cena (€)': opt.price * opt.quantity,
+      Grupa: opt.group,
+    }));
+
+    const sheet = XLSX.utils.json_to_sheet(rows);
+    sheet['!cols'] = [
+      { wch: 6 },
+      { wch: 45 },
+      { wch: 12 },
+      { wch: 10 },
+      { wch: 8 },
+      { wch: 16 },
+      { wch: 8 },
+    ];
+
+    // Two decimals on the price and line total columns (C and F)
+    for (let row = 2; row <= rows.length + 1; row++) {
+      for (const col of ['C', 'F']) {
+        const cell = sheet[`${col}${row}`];
+        if (cell) cell.z = '#,##0.00';
+      }
+    }
+
+    const book = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(book, sheet, 'Predkalkulacija');
+    XLSX.writeFile(book, `${this.baseFileName()}.xlsx`);
+  }
+
+  private baseFileName(): string {
+    const ponuda = this.formData.offerCode
       ? `${this.formData.offerPrefix}${this.formData.offerCode}${this.formData.offerSuffix}`
       : 'P';
-    const saveTehnike = this.formData.technicalCode
+    const tehnika = this.formData.technicalCode
       ? `${this.formData.technicalPrefix}${this.formData.technicalCode}${this.formData.technicalSuffix}`
       : 'T';
-    doc.save(`KALKP_${savePonude}_${saveTehnike}.pdf`);
+    return `KALKP_${ponuda}_${tehnika}`;
   }
 
   /** Draws the totals block starting at `startY`; returns the y of its last line. */
