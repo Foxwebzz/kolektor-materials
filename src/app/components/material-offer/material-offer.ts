@@ -261,6 +261,8 @@ export class MaterialOfferComponent {
       },
     });
 
+    this.drawTotalsAfterTable(doc);
+
     // Fixed material offer table (Pregled predkalkulacije)
     doc.addPage();
     doc.setFontSize(14);
@@ -335,6 +337,8 @@ export class MaterialOfferComponent {
       },
     });
 
+    this.drawTotalsAfterTable(doc);
+
     doc.save(`${this.baseFileName()}.pdf`);
   }
 
@@ -382,6 +386,23 @@ export class MaterialOfferComponent {
       ? `${this.formData.technicalPrefix}${this.formData.technicalCode}${this.formData.technicalSuffix}`
       : 'T';
     return `KALKP_${ponuda}_${tehnika}`;
+  }
+
+  /**
+   * Draws the totals block below the table that was just rendered, moving it to
+   * a new page when it would not fit under the table.
+   */
+  private drawTotalsAfterTable(doc: jsPDF) {
+    const blockHeight = 28; // first to last baseline of the totals block
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let startY = (doc as any).lastAutoTable.finalY + 12;
+
+    if (startY + blockHeight > pageHeight - 15) {
+      doc.addPage();
+      startY = 20;
+    }
+
+    this.drawTotals(doc, startY);
   }
 
   /** Draws the totals block starting at `startY`; returns the y of its last line. */
@@ -604,7 +625,14 @@ export class MaterialOfferComponent {
         /Poz\.?\s*Naziv\s*Cena\s*(?:\([^)]*\))?\s*Kolicina\s*JM\s*Ukupna cena\s*(?:\([^)]*\))?\s*(?:Grupa)?/gi,
         ' '
       )
-      .replace(/UKUPNO:?\s*[\d,.]+/gi, ' ');
+      .replace(/UKUPNO:?\s*[\d,.]+/gi, ' ')
+      // Totals block printed under each table. The colon is what separates these
+      // from a real row such as "58. Proizvodni sati 63,00 1 h h 63,00".
+      .replace(
+        /(?:Ukupna cena materijala|Proizvodni sati|Ukupna cena|Energetski dodatak\s*\([\d.,]+%\)):\s*[\d.,]+\s*€?/gi,
+        ' '
+      )
+      .replace(/Masa Transformatora:\s*[\d.,]+\s*kg\s*[\d.,]+\s*€\/kg/gi, ' ');
 
     // Locate section-title markers (e.g. "Rad", "Izolatori") so items whose names
     // were edited and no longer match MATERIALS still retain their group heading.
